@@ -13,7 +13,7 @@ Designed to broadcast data to [Substantial Dash client](https://github.com/subst
 
 ### Requirements
 
-* [Ruby 2.0](https://www.ruby-lang.org/en/installation/) installed
+* [Ruby 2.1.1](https://www.ruby-lang.org/en/installation/) installed
 * `gem install bundler`
 
 ### Boot-up
