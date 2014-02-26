@@ -2,6 +2,8 @@
 
 **An early work-in-progress** to visualize realtime events, statuses, and key performance indicators.
 
+Designed to broadcast data to [Substantial Dash client](https://github.com/substantial/substantial-dash-client).
+
 ## Tech
 
 * [Ruby on Rails 4](http://rubyonrails.org)
