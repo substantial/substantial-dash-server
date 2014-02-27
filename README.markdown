@@ -15,7 +15,7 @@ Designed to broadcast data to [Substantial Dash client](https://github.com/subst
 
 ### Requirements
 
-* [Ruby 2.1.1](https://www.ruby-lang.org/en/installation/) installed
+* [Rubinius 2.2.5](http://rubini.us/) installed
 * `gem install bundler`
 
 ### Boot-up
