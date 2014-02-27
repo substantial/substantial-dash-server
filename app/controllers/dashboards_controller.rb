@@ -9,17 +9,13 @@ class DashboardsController < ApplicationController
     response.headers['Access-Control-Allow-Credentials'] = 'true'
     response.headers['Access-Control-Allow-Origin'] = 'http://0.0.0.0:8000'
 
-    sse_stream = ServerSentEventStream.new(response.stream)
-
-    begin
-      loop do
-        sse_stream.write({ :time => Time.now })
-        sleep 1
+    # This stream will remain open until the client closes or disconnects.
+    ServerSentEventStream.new(response.stream).write_and_close do |stream|
+      $redis.subscribe("dashboard:#{params[:id]}") do |on|
+        on.message do |channel, data|
+          stream.write(data)
+        end
       end
-    rescue IOError
-      # When the client disconnects, we'll get an IOError on write
-    ensure
-      sse_stream.close
     end
   end
 end
