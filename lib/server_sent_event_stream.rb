@@ -21,11 +21,15 @@ class ServerSentEventStream
     yield(self) if block_given?
   rescue IOError
     # Client disconnect; write raises IOError.
+    Rails.logger.debug "ServerSentEventStream#write_and_close: client disconnected."
   ensure
+    Rails.logger.debug "ServerSentEventStream#write_and_close: closing."
     close
   end
 
   # Serializes the object to JSON, outputting to the IO.
+  #
+  # If the object is a string, assumes it's already encoded as JSON.
   #
   # Meta keys include:
   #   * `id` lets the browser keep track of the last event fired
@@ -36,7 +40,8 @@ class ServerSentEventStream
     meta.each do |k,v|
       @io.write "#{k}: #{v}\n"
     end
-    @io.write "data: #{JSON.dump(object)}\n\n"
+    json = String===object ? object : JSON.dump(object)
+    @io.write "data: #{json}\n\n"
   end
 
   def close

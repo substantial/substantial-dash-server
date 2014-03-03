@@ -1,0 +1,26 @@
+require 'data_intake'
+require 'net/http'
+
+class GithubOrgFeedSubstantialSf < DataIntake
+
+  recurrence { minutely(1) }
+
+  def intake
+    uri = URI('https://api.github.com/users/mars/events/orgs/substantial')
+    is_ssl = uri.scheme == 'https'
+    req = Net::HTTP::Get.new(uri)
+    req['Accept'] = 'application/vnd.github.v3+json'
+    req['Authorization'] = "token #{ENV['INTAKE_GITHUB_API_TOKEN']}"
+
+    res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: is_ssl) {|http|
+      http.request(req)
+    }
+
+    unless Net::HTTPSuccess===res
+      Rails.logger.error "#{self.class} recv'd an unsuccessful response: #{res.inspect}"
+      return
+    end
+
+    JSON.parse(res.body)
+  end
+end

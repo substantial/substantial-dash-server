@@ -45,6 +45,12 @@ describe ServerSentEventStream do
           expect(output).to have_received(:write).with(%{data: {"foo":"bar"}\n\n})
         end
       end
+      describe "for a string" do
+        before(:each) { subject.write( "[1,2,3]" ) }
+        it "outputs a the string without further encoding" do
+          expect(output).to have_received(:write).with(%{data: [1,2,3]\n\n})
+        end
+      end
       describe "for an object and meta" do
         before(:each) { subject.write({ foo: "bar" }, { retry: 10000 }) }
         it "outputs the meta data and a JSON event" do
