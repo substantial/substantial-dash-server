@@ -6,7 +6,7 @@ class GithubOrgFeedSubstantialSf < DataIntake
   recurrence { minutely(1) }
 
   def intake
-    uri = URI('https://api.github.com/users/mars/events/orgs/substantial')
+    uri = URI(ENV['INTAKE_GITHUB_API_ORG_FEED_URL'])
     is_ssl = uri.scheme == 'https'
     req = Net::HTTP::Get.new(uri)
     req['Accept'] = 'application/vnd.github.v3+json'
