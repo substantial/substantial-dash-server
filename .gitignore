@@ -17,3 +17,9 @@
 
 vendor/bundle
 .bundle/
+
+.envrc*
+
+# rubymine
+/.idea
+.rvmrc
