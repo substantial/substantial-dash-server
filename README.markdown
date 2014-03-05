@@ -28,6 +28,7 @@ Designed to broadcast data to [Substantial Dash client](https://github.com/subst
 
 Set-up the **.envrc** file containing auth keys:
 
+    export INTAKE_GITHUB_API_ORG_FEED_URL=https://api.github.com/...
     export INTAKE_GITHUB_API_TOKEN=XXXXX
 
 Then, execute `direnv allow`
