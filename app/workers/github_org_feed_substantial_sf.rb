@@ -12,15 +12,16 @@ class GithubOrgFeedSubstantialSf < DataIntake
     req['Accept'] = 'application/vnd.github.v3+json'
     req['Authorization'] = "token #{ENV['INTAKE_GITHUB_API_TOKEN']}"
 
-    res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: is_ssl) {|http|
+    res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: is_ssl) do |http|
       http.request(req)
-    }
+    end
 
     unless Net::HTTPSuccess===res
       Rails.logger.error "#{self.class} recv'd an unsuccessful response: #{res.inspect}"
       return
     end
 
+    Rails.logger.debug(res.body.inspect)
     JSON.parse(res.body)
   end
 end
