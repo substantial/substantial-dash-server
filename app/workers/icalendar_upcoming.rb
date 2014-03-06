@@ -2,7 +2,7 @@ require 'data_intake'
 
 class IcalendarUpcoming < DataIntake
 
-  EVENT_COUNT_LIMIT = 3
+  EVENT_COUNT_LIMIT = 5
 
   recurrence { minutely(15) }
 
@@ -23,11 +23,24 @@ class IcalendarUpcoming < DataIntake
     calendar = parse_calendar(res.body)
     events = upcoming_events(calendar)
 
-    events[0...EVENT_COUNT_LIMIT]
+    export(events[0...EVENT_COUNT_LIMIT])
+  end
+
+  def export(ri_events)
+    ri_events.map do |event|
+      {
+        summary: event.summary,
+        description: event.description,
+        location: event.location,
+        starts_at: event.dtstart,
+        ends_at: event.dtend,
+        organizer: event.organizer
+      }
+    end
   end
 
   def parse_calendar(ics_data)
-    cals = RiCal.parse_string(ics_data)
+    cals = RiCal.parse_string(ics_data.to_s)
     cals.first
   end
 

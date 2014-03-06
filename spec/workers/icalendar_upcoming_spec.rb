@@ -32,13 +32,25 @@ describe IcalendarUpcoming do
         @body
       end
     end
-    
+
     let(:response) { FakeResponse.new("200", ics_data) }
     before { Net::HTTP.stub(:start).and_return(response) }
     let(:returns) { subject.intake }
 
     it "returns events" do
-      expect( returns.all? {|ev| RiCal::Component::Event === ev } ).to be_true
+      expect( returns ).to_not be_empty
+      expect( returns.all? {|ev| ev[:starts_at] } ).to be_true
+    end
+  end
+
+  describe "#export" do
+    let(:calendar) { subject.parse_calendar(ics_data) }
+    let(:events) { subject.upcoming_events(calendar) }
+    let(:exports) { subject.export(events) }
+
+    it "returns a collection of hashes" do
+      expect(exports).to be_kind_of(Array)
+      expect(exports.all? {|e| Hash===e }).to be_true
     end
   end
 
