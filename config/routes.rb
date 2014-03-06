@@ -4,6 +4,10 @@ SubstantialDashServer::Application.routes.draw do
 
   get 'intakes/:id/subscribe', to: 'intakes#subscribe'
 
+  #TODO Implement authentication before exposing Sidekiq UI.
+  # require 'sidekiq/web'
+  # mount Sidekiq::Web => '/sidekiq'
+
   # You can have the root of your site routed with "root"
   # root 'welcome#index'
 

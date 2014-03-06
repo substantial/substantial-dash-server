@@ -53,6 +53,7 @@ gem 'redis'
 gem 'redis-namespace'
 # Async processing.
 gem 'sidekiq'
+gem 'sinatra', '>= 1.3.0', :require => nil
 # Recurring job scheduler.
 gem 'sidetiq'
 
