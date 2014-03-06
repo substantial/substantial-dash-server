@@ -43,6 +43,7 @@ end
 
 group :development, :test do
   gem 'rspec-rails'
+  gem 'timecop'
 end
 
 # Multi-threaded, concurrent app server.
@@ -54,3 +55,5 @@ gem 'redis-namespace'
 gem 'sidekiq'
 # Recurring job scheduler.
 gem 'sidetiq'
+
+gem 'ri_cal'

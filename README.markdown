@@ -30,6 +30,7 @@ Set-up the **.envrc** file containing auth keys:
 
     export INTAKE_GITHUB_API_ORG_FEED_URL=https://api.github.com/...
     export INTAKE_GITHUB_API_TOKEN=XXXXX
+    export INTAKE_GOOGLE_ICALENDAR_URL=http://www.google.com/calendar/ical/...
 
 Then, execute `direnv allow`
 
