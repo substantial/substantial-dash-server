@@ -21,7 +21,7 @@ class GithubOrgFeedSubstantialSf < DataIntake
       return
     end
 
-    Rails.logger.debug(res.body.inspect)
+    #Rails.logger.debug(res.body.inspect)
     JSON.parse(res.body)
   end
 end

@@ -26,11 +26,11 @@ class DataIntake
   # Push the object (serialized to JSON) out to all subscribers.
   #
   def publish(object)
-    channel_name = "intake:#{self.class.name.underscore.dasherize}"
+    redis_channel_name = "intake:#{self.class.name.underscore.dasherize}"
     json = JSON.generate(object)
-    save_to_buffer(channel_name, json)
+    save_to_buffer(redis_channel_name, json)
 
-    $redis.publish(channel_name, json)
+    $redis.publish(redis_channel_name, json)
   end
 
   def save_to_buffer(channel_name, data)

@@ -46,6 +46,10 @@ group :development, :test do
   gem 'timecop'
 end
 
+#group :test do
+#  gem 'mock_redis'
+#end
+
 # Multi-threaded, concurrent app server.
 gem 'puma'
 # Pub/Sub system, and persistence.
