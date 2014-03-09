@@ -2,8 +2,6 @@ SubstantialDashServer::Application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
-  get 'intakes/:id/subscribe', to: 'intakes#subscribe'
-
   #TODO Implement authentication before exposing Sidekiq UI.
   # require 'sidekiq/web'
   # mount Sidekiq::Web => '/sidekiq'

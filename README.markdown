@@ -7,8 +7,8 @@ Designed to broadcast data to [Substantial Dash client](https://github.com/subst
 ## Tech
 
 * [Ruby on Rails 4](http://rubyonrails.org)
-* [Server Sent Events](http://www.html5rocks.com/en/tutorials/eventsource/basics/): streaming dashboard updates
-* [Redis](http://redis.io/): publish/subscribe & data persistence
+* [Bayeux/Faye events](http://faye.jcoglan.com): publish & subscribe to data streams
+* [Redis](http://redis.io): work queue, scheduling, and key/value persistence
 * [Sidekiq](http://mperham.github.com/sidekiq/): asynchronous job processing
 
 ## Development

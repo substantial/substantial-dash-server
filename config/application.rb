@@ -26,3 +26,6 @@ module SubstantialDashServer
     # config.i18n.default_locale = :de
   end
 end
+
+SubstantialDashServer::Application.config.
+  middleware.use Faye::RackAdapter

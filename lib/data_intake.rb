@@ -26,25 +26,57 @@ class DataIntake
   # Push the object (serialized to JSON) out to all subscribers.
   #
   def publish(object)
-    redis_channel_name = "intake:#{self.class.name.underscore.dasherize}"
     json = JSON.generate(object)
-    save_to_buffer(redis_channel_name, json)
+    save_to_buffer(json)
 
-    $redis.publish(redis_channel_name, json)
+    EM.run do
+      client = Faye::Client.new('http://0.0.0.0:8001/bayeux')
+      publication = client.publish(bayeux_channel, json)
+      publication.callback do
+        Rails.logger.debug("bayeaux published to `#{bayeux_channel}`")
+        EM.stop_event_loop
+      end
+      publication.errback do |error|
+        Rails.logger.debug("bayeaux publish failed to `#{bayeux_channel}`: #{error.inspect}")
+        EM.stop_event_loop
+      end
+    end
   end
 
-  def save_to_buffer(channel_name, data)
-    key_for_buffer = self.class.buffer_key(channel_name)
-    $redis.set(key_for_buffer, data)
+  def save_to_buffer(data)
+    $redis.set(redis_buffer_key, data)
   end
 
-  def self.read_from_buffer(channel_name)
-    key_for_buffer = buffer_key(channel_name)
-    $redis.get(key_for_buffer)
+  def self.read_from_buffer
+    $redis.get(redis_buffer_key)
   end
 
-  def self.buffer_key(channel_name)
-    "#{channel_name}:buffer"
+  def self.channel_name
+    name.underscore.dasherize
+  end
+
+  def self.redis_channel_name
+    "intake:#{channel_name}"
+  end
+
+  def self.redis_buffer_key
+    "#{redis_channel_name}:buffer"
+  end
+
+  def channel_name
+    self.class.channel_name
+  end
+
+  def redis_channel_name
+    self.class.redis_channel_name
+  end
+
+  def redis_buffer_key
+    self.class.redis_buffer_key
+  end
+
+  def bayeux_channel
+    "/#{channel_name}"
   end
 
 end

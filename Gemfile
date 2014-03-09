@@ -41,9 +41,10 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-group :development, :test do
+group :test do
   gem 'rspec-rails'
   gem 'timecop'
+  gem 'em-rspec'
 end
 
 #group :test do
@@ -52,6 +53,8 @@ end
 
 # Multi-threaded, concurrent app server.
 gem 'puma'
+# Bidirectional, async client server (WebSockets)
+gem 'faye'
 # Pub/Sub system, and persistence.
 gem 'redis'
 gem 'redis-namespace'
