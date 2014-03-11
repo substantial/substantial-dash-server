@@ -1,4 +1,5 @@
 language: ruby
+script: "bundle exec rspec --format=documentation"
 rvm:
   - 2.1.1
   - rbx-2.2.6
