@@ -15,7 +15,7 @@ Designed to broadcast data to [Substantial Dash client](https://github.com/subst
 
 ### Requirements
 
-* [Rubinius 2.2.5](http://rubini.us/) installed
+* [Rubinius 2.2.6](http://rubini.us/) installed (Ruby 2.1 compatible)
 * `gem install bundler`
 * `brew install direnv` & [add the hook for your shell](http://direnv.net/)
 * `brew install redis` & follow resulting directions to start the server or add launcher
