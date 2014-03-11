@@ -1,4 +1,4 @@
-# Substantial Dash server
+# Substantial Dash server [![Build Status](https://travis-ci.org/substantial/substantial-dash-server.png)](https://travis-ci.org/substantial/substantial-dash-server)
 
 **An early work-in-progress** to visualize realtime events, statuses, and key performance indicators.
 
