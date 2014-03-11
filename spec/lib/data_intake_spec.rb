@@ -24,6 +24,7 @@ describe DataIntake do
     end
 
     it 'should publish to the bayeaux subscribers' do
+      Redis.any_instance.should_receive(:set)
       Faye::Client.any_instance.should_receive(:publish)
         .with(subject.bayeux_channel, json_input).and_call_original
       subject.publish(input)
