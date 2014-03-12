@@ -3,3 +3,6 @@ rvm:
   - 2.1.1
   - rbx-2.2.6
 cache: bundler
+notifications:
+  flowdock:
+    secure: fCuPZ13YwGzvVoCuJdjepV0vWc/3gwvqPlHmsap8I5tLfX5jpcXLr1fNHTYJ9qmgomnBpD/8GCjIPFimjuYNTZU4b8RAM7QkTyJmXicZZqAvdy7pmUNz1K0jBO87wsvCELwHnj17lRmMoKD2wR7MeEwjnZqL3SOrf3bTvRVBEeg=
