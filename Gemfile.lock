@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:substantial/em-rspec.git
+  remote: https://github.com/substantial/em-rspec.git
   revision: 459f6a26621023912a174f87ce6833046c3c74ed
   specs:
     em-rspec (0.1.1)
