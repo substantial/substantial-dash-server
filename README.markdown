@@ -46,8 +46,6 @@ Start the server at http://0.0.0.0:8001
     
     bundle exec puma -p 8001 --config config/puma.rb
 
-**Note this Rails development server does not auto-reload code,** because the class-reloading seems to causes the Redis connections to silently drop.
-
 ...and in another terminal, the background workers:
 
     bundle exec sidekiq

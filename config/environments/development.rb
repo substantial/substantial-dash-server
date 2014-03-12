@@ -1,9 +1,8 @@
 SubstantialDashServer::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  # Production-like so Redis & ActionController::Live streaming cooperate.
-  config.cache_classes = true
-  config.eager_load = true
+  config.cache_classes = false
+  config.eager_load = false
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
