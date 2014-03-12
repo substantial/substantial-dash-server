@@ -45,7 +45,7 @@ group :test do
   gem 'rspec'
   gem 'rspec-rails'
   gem 'timecop'
-  gem 'em-rspec', git: 'git@github.com:substantial/em-rspec.git'
+  gem 'em-rspec', git: 'https://github.com/substantial/em-rspec.git'
 end
 
 #group :test do
