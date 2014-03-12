@@ -7,7 +7,7 @@ describe DataIntake do
 
   subject { DataIntake.new }
 
-  describe '#publish' do
+  describe '#publish', eventmachine: true do
     let(:namespaced_buffer_key) do
       "#{REDIS_NAMESPACE}:#{subject.redis_buffer_key}"
     end

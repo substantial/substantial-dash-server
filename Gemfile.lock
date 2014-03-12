@@ -1,3 +1,10 @@
+GIT
+  remote: git@github.com:substantial/em-rspec.git
+  revision: 459f6a26621023912a174f87ce6833046c3c74ed
+  specs:
+    em-rspec (0.1.1)
+      eventmachine (>= 0.12.10)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -47,8 +54,6 @@ GEM
       em-socksify (>= 0.3)
       eventmachine (>= 1.0.3)
       http_parser.rb (>= 0.6.0)
-    em-rspec (0.1.1)
-      eventmachine (>= 0.12.10)
     em-socksify (0.3.0)
       eventmachine (>= 1.0.0.beta.4)
     erubis (2.7.0)
@@ -177,7 +182,7 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 4.0.0)
-  em-rspec
+  em-rspec!
   faye
   jbuilder (~> 1.2)
   jquery-rails

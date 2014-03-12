@@ -4,3 +4,10 @@
 require File.expand_path('../config/application', __FILE__)
 
 SubstantialDashServer::Application.load_tasks
+
+require 'rspec/core/rake_task'
+
+RSpec::Core::RakeTask.new(:spec) do |t|
+  t.rspec_opts = "--format=documentation"
+end
+task :default => :spec
