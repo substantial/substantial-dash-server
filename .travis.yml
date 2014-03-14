@@ -2,6 +2,8 @@ language: ruby
 rvm:
   - 2.1.1
   - rbx-2.2.6
+services:
+  - redis-server
 cache: bundler
 notifications:
   flowdock:
