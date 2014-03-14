@@ -10,6 +10,7 @@ Designed to broadcast data to [Substantial Dash client](https://github.com/subst
 * [Bayeux/Faye events](http://faye.jcoglan.com): publish & subscribe to data streams
 * [Redis](http://redis.io): work queue, scheduling, and key/value persistence
 * [Sidekiq](http://mperham.github.com/sidekiq/): asynchronous job processing
+* [OmniAuth](https://github.com/intridea/omniauth): user authentication
 
 ## Development
 

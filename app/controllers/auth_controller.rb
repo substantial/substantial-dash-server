@@ -11,7 +11,7 @@ class AuthController < ApplicationController
     auth_data = request.env['omniauth.auth']
     @user_name = auth_data['info']['name']
     @api_read_key = SecureRandom.base64
-    $redis.mapped_hmset("api-read-key:#{@api_read_key}", auth_data.slice('provider', 'uid', 'info'))
+    $redis.mapped_hmset("#{SubscriberAuth::KEY_PREFIX}#{@api_read_key}", auth_data.slice('provider', 'uid', 'info'))
 
     # Redirect if we captured a referring URL. Otherwise render.
     if referer = session[:auth_referer]
