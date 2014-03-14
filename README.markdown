@@ -29,6 +29,7 @@ Designed to broadcast data to [Substantial Dash client](https://github.com/subst
 
 Set-up the **.envrc** file containing auth keys:
 
+    export BAYEUX_PUBLISH_KEY=XXXXX
     export INTAKE_GITHUB_API_ORG_FEED_URL=https://api.github.com/...
     export INTAKE_GITHUB_API_TOKEN=XXXXX
     export INTAKE_GOOGLE_ICALENDAR_URL=http://www.google.com/calendar/ical/...

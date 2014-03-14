@@ -31,6 +31,7 @@ class DataIntake
 
     EM.run do
       client = Faye::Client.new('http://0.0.0.0:8001/bayeux')
+      client.add_extension(PublisherAuth::Client.new)
       publication = client.publish(bayeux_channel, json)
       publication.callback do
         Rails.logger.debug("bayeaux published to `#{bayeux_channel}`")
