@@ -70,6 +70,7 @@ GEM
     faye-websocket (0.7.2)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.3.1)
+    hashie (2.0.5)
     hike (1.2.3)
     http_parser.rb (0.6.0)
     i18n (0.6.9)
@@ -87,10 +88,27 @@ GEM
     mime-types (1.25.1)
     minitest (4.7.5)
     multi_json (1.8.4)
+    omniauth (1.2.1)
+      hashie (>= 1.2, < 3)
+      rack (~> 1.0)
+    omniauth-google-apps (0.1.0)
+      omniauth (~> 1.0)
+      omniauth-openid (~> 1.0)
+      ruby-openid (~> 2.3.0)
+      ruby-openid-apps-discovery (~> 1.2.0)
+    omniauth-openid (1.0.1)
+      omniauth (~> 1.0)
+      rack-openid (~> 1.3.1)
+    openid-store-redis (0.1.0)
+      redis (~> 3.0)
+      ruby-openid (>= 2.1.7)
     polyglot (0.3.4)
     puma (2.7.1)
       rack (>= 1.1, < 2.0)
     rack (1.5.2)
+    rack-openid (1.3.1)
+      rack (>= 1.1.0)
+      ruby-openid (>= 2.1.8)
     rack-protection (1.5.2)
       rack
     rack-test (0.6.2)
@@ -114,6 +132,8 @@ GEM
     redis (3.0.7)
     redis-namespace (1.4.1)
       redis (~> 3.0.4)
+    redis-session-store (0.4.0)
+      redis
     ri_cal (0.8.8)
     rspec (2.14.1)
       rspec-core (~> 2.14.0)
@@ -131,6 +151,9 @@ GEM
       rspec-core (~> 2.14.0)
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
+    ruby-openid (2.3.0)
+    ruby-openid-apps-discovery (1.2.0)
+      ruby-openid (>= 2.1.7)
     sass (3.2.14)
     sass-rails (4.0.1)
       railties (>= 4.0.0, < 5.0)
@@ -186,10 +209,14 @@ DEPENDENCIES
   faye
   jbuilder (~> 1.2)
   jquery-rails
+  omniauth
+  omniauth-google-apps
+  openid-store-redis
   puma
   rails (= 4.0.3)
   redis
   redis-namespace
+  redis-session-store
   ri_cal
   rspec
   rspec-rails

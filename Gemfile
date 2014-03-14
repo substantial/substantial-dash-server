@@ -64,5 +64,11 @@ gem 'sidekiq'
 gem 'sinatra', '>= 1.3.0', :require => nil
 # Recurring job scheduler.
 gem 'sidetiq'
-
+# iCalendar / *.ics parser
 gem 'ri_cal'
+# OAuth2 authentication
+gem 'omniauth'
+gem 'omniauth-google-apps'
+gem 'openid-store-redis'
+
+gem 'redis-session-store'

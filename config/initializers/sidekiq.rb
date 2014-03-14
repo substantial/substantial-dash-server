@@ -1,4 +1,4 @@
-namespace = "dash-sidekiq-#{Rails.env.downcase}"
+namespace = "#{REDIS_NAMESPACE}-sidekiq"
 
 Sidekiq.configure_server do |config|
   config.redis = { namespace: namespace }

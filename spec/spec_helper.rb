@@ -39,14 +39,14 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
-
-  # Mock Redis
-  #config.before(:each) do
-  #  Rails.logger.debug("meow meow")
-  #  redis_instance = MockRedis.new
-  #  Redis.stub(:new).and_return { redis_instance }
-  #  Redis::Namespace.stub(:new).and_return { redis_instance }
-  #  MockRedis.stub(:subscribe)
-  #  MockRedis.stub(:publish)
-  #end
 end
+
+OmniAuth.config.test_mode = true
+OmniAuth.config.mock_auth[:google_apps] = OmniAuth::AuthHash.new(
+  provider: 'google_apps',
+  uid: '00042',
+  info: {
+    name: 'Foob Ar',
+    email: 'foob.ar@substantial.com'
+  }
+)

@@ -1,3 +1,3 @@
 on_restart do
-  $redis = Redis::Namespace.new(REDIS_NAMESPACE, :redis => Redis.new)
+  $redis = Redis::Namespace.new(REDIS_NAMESPACE)
 end
