@@ -34,3 +34,5 @@ SubstantialDashServer::Application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 end
+
+ENV['BAYEUX_PUBLISH_KEY'] = 'test-secret-set-in-config/environments/test.rb'
