@@ -23,14 +23,14 @@ describe PublisherAuth do
 
       it "passes the message" do
         callback_was_called = false
-        callback = -> (message) { callback_was_called = true }
+        callback = ->(message) { callback_was_called = true }
         subject.incoming(message, callback)
         expect(callback_was_called).to be_true
       end
 
       it "keeps the API key secret" do
         callback_message = nil
-        callback = -> (message) { callback_message = message }
+        callback = ->(message) { callback_message = message }
         subject.incoming(message, callback)
         expect(callback_message['ext']).to be_kind_of(Hash)
         expect(callback_message['ext']['apiKey']).to be_nil
@@ -46,7 +46,7 @@ describe PublisherAuth do
 
       it "calls back with an error" do
         callback_message = nil
-        callback = -> (message) { callback_message = message }
+        callback = ->(message) { callback_message = message }
         subject.incoming(message, callback)
         expect(callback_message['error']).to eq('Unauthorized')
       end
@@ -63,7 +63,7 @@ describe PublisherAuth do
 
     it "passes the message" do
       callback_was_called = false
-      callback = -> (message) { callback_was_called = true }
+      callback = ->(message) { callback_was_called = true }
       subject.incoming(message, callback)
       expect(callback_was_called).to be_true
     end
@@ -85,7 +85,7 @@ describe PublisherAuth do
 
     it "passes the API key" do
       callback_message = nil
-      callback = -> (message) { callback_message = message }
+      callback = ->(message) { callback_message = message }
       subject.outgoing(message, callback)
       expect(callback_message['ext']).to be_kind_of(Hash)
       expect(callback_message['ext']['apiKey']).to eq(api_key)

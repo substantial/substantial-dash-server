@@ -28,7 +28,7 @@ describe SubscriberAuth do
 
       it "passes the message" do
         callback_was_called = false
-        callback = -> (message) { callback_was_called = true }
+        callback = ->(message) { callback_was_called = true }
         subject.incoming(message, callback)
         expect(callback_was_called).to be_true
       end
@@ -37,7 +37,7 @@ describe SubscriberAuth do
     describe "without an API key" do
       it "calls back with an error" do
         callback_message = nil
-        callback = -> (message) { callback_message = message }
+        callback = ->(message) { callback_message = message }
         subject.incoming(message, callback)
         expect(callback_message['error']).to eq('API key is required')
       end
@@ -53,7 +53,7 @@ describe SubscriberAuth do
 
       it "calls back with an error" do
         callback_message = nil
-        callback = -> (message) { callback_message = message }
+        callback = ->(message) { callback_message = message }
         subject.incoming(message, callback)
         expect(callback_message['error']).to eq('Unauthorized')
       end
@@ -70,7 +70,7 @@ describe SubscriberAuth do
 
     it "passes the message" do
       callback_was_called = false
-      callback = -> (message) { callback_was_called = true }
+      callback = ->(message) { callback_was_called = true }
       subject.incoming(message, callback)
       expect(callback_was_called).to be_true
     end
