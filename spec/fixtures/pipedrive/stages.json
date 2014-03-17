@@ -1,0 +1,13 @@
+{"success":true,"data":
+[
+    {"id":2,"order_nr":2,"name":"Opportunity","active_flag":true,"deal_probability":20,"pipeline_id":1,"rotten_flag":true,"rotten_days":20,"pipeline_name":"Sales Pipeline"},
+    {"id":3,"order_nr":3,"name":"Qualified","active_flag":true,"deal_probability":25,"pipeline_id":1,"rotten_flag":true,"rotten_days":10,"pipeline_name":"Sales Pipeline"},
+    {"id":28,"order_nr":4,"name":"Pursuing","active_flag":true,"deal_probability":40,"pipeline_id":1,"rotten_flag":false,"rotten_days":null,"pipeline_name":"Sales Pipeline"},
+    {"id":6,"order_nr":5,"name":"Proposed","active_flag":true,"deal_probability":50,"pipeline_id":1,"rotten_flag":true,"rotten_days":10,"pipeline_name":"Sales Pipeline"},
+    {"id":7,"order_nr":6,"name":"In Negotiation","active_flag":true,"deal_probability":80,"pipeline_id":1,"rotten_flag":true,"rotten_days":7,"pipeline_name":"Sales Pipeline"},
+    {"id":13,"order_nr":1,"name":"Idea","active_flag":true,"deal_probability":0,"pipeline_id":3,"rotten_flag":true,"rotten_days":90,"pipeline_name":"Existing Business"},
+    {"id":14,"order_nr":2,"name":"Opportunity","active_flag":true,"deal_probability":30,"pipeline_id":3,"rotten_flag":true,"rotten_days":20,"pipeline_name":"Existing Business"},
+    {"id":15,"order_nr":3,"name":"Qualified","active_flag":true,"deal_probability":50,"pipeline_id":3,"rotten_flag":true,"rotten_days":10,"pipeline_name":"Existing Business"},
+    {"id":17,"order_nr":5,"name":"Proposed","active_flag":true,"deal_probability":50,"pipeline_id":3,"rotten_flag":true,"rotten_days":10,"pipeline_name":"Existing Business"},
+    {"id":18,"order_nr":6,"name":"In Negotiation","active_flag":true,"deal_probability":80,"pipeline_id":3,"rotten_flag":true,"rotten_days":7,"pipeline_name":"Existing Business"}
+]}

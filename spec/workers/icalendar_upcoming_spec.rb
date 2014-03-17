@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'fake_http_response'
 
 describe IcalendarUpcoming do
   subject { IcalendarUpcoming.new }
@@ -21,20 +22,7 @@ describe IcalendarUpcoming do
 
   describe "#intake" do
 
-    class FakeResponse
-      def initialize(code, body)
-        @code = code
-        @body = body
-      end
-      def code
-        @code
-      end
-      def body
-        @body
-      end
-    end
-
-    let(:response) { FakeResponse.new("200", ics_data) }
+    let(:response) { FakeHttpResponse.new("200", ics_data) }
     before { Net::HTTP.stub(:start).and_return(response) }
     let(:returns) { subject.intake }
 

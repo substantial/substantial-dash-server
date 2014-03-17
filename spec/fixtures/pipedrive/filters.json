@@ -1,0 +1,8 @@
+
+{"success":true,"data":
+    [
+    {"id":1,"name":"All open deals","active_flag":true,"type":"deals","temporary_flag":null,"user_id":null,"add_time":"2013-12-05 15:18:10","update_time":null},
+    {"id":2,"name":"All won deals","active_flag":true,"type":"deals","temporary_flag":null,"user_id":null,"add_time":"2013-12-05 15:18:10","update_time":null},
+    {"id":14,"name":"SF","active_flag":true,"type":"deals","temporary_flag":null,"user_id":161873,"add_time":"2014-03-10 18:45:20","update_time":"2014-03-10 18:49:11"}
+    ]
+}

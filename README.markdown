@@ -33,6 +33,10 @@ Set-up the **.envrc** file containing auth keys:
     export INTAKE_GITHUB_API_ORG_FEED_URL=https://api.github.com/...
     export INTAKE_GITHUB_API_TOKEN=XXXXX
     export INTAKE_GOOGLE_ICALENDAR_URL=http://www.google.com/calendar/ical/...
+    export INTAKE_PIPEDRIVE_FILTER_NAMES='...'
+    export INTAKE_PIPEDRIVE_PIPELINE_NAME='...'
+    export INTAKE_PIPEDRIVE_API_URL=https://api.pipedrive.com/v1
+    export INTAKE_PIPEDRIVE_API_TOKEN=...
 
 Then, execute `direnv allow`
 

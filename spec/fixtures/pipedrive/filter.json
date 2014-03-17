@@ -1,0 +1,9 @@
+
+{"success":true,"data":
+    {"id":14,"name":"SF","active_flag":true,"type":"deals","temporary_flag":null,"user_id":161873,"add_time":"2014-03-10 18:45:20","update_time":"2014-03-10 18:49:11","conditions":{"glue":"and","conditions":[{"glue":"and","conditions":[{"object":"deal","field_id":"12443","operator":"=","value":"open","extra_value":null}]},{"glue":"or","conditions":
+        [
+        {"object":"person","field_id":"9024","operator":"=","value":"158906","extra_value":null},
+        {"object":"person","field_id":"9024","operator":"=","value":"161873","extra_value":null}
+        ]
+    }]}}
+}
