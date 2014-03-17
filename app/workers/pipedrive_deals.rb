@@ -3,7 +3,7 @@ require 'net/http'
 
 class PipedriveDeals < DataIntake
 
-  recurrence { secondly(30) }
+  recurrence { minutely(15) }
 
   def intake
     filter_names = ENV['INTAKE_PIPEDRIVE_FILTER_NAMES']
