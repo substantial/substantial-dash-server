@@ -3,7 +3,7 @@ require 'net/http'
 
 class PipedriveDeals < DataIntake
 
-  recurrence { minutely(15) }
+  recurrence { minutely(1) }
 
   def intake
     filter_names = ENV['INTAKE_PIPEDRIVE_FILTER_NAMES']
@@ -16,37 +16,48 @@ class PipedriveDeals < DataIntake
     pipeline_stages = pipeline_stages(pipeline_id)
 
     # aggregate
-    export(pipeline_stages, pipeline_deals_filtered)
+    export(pipeline_stages, 'Substantial', filter_names.split(',')[0], pipeline_deals, pipeline_deals_filtered)
   end
 
-  def export(stages, deals)
-    output = []
-    if stages.nil? || stages.empty? || deals.nil? || deals.empty?
-      return output
+  def export(stages, unfiltered_name, filtered_name, unfiltered_deals, filtered_deals)
+    pipeline_summary = []
+
+    if stages.nil? || stages.empty? || unfiltered_deals.nil? || unfiltered_deals.empty?
+      return pipeline_summary
     end
 
     stages.sort! { |x,y| x['order_nr'] <=> y['order_nr'] }
 
     stages.each do |stage|
-      summary = {
+      filtered_deals_summarized = summarize_deals(filtered_name, stage, filtered_deals.reject{ |deal| deal['stage_id'] != stage['id'] })
+      unfiltered_deals_summarized = summarize_deals(unfiltered_name, stage, unfiltered_deals.reject{ |deal| deal['stage_id'] != stage['id'] })
+
+      stage_summary = {
           name: stage['name'],
-          deal_probability: stage['deal_probability']
+          datasets: [filtered_deals_summarized, unfiltered_deals_summarized]
       }
-      stage_id = stage['id']
 
-      deals_value = 0
-      deals.each do |deal|
-        if deal['stage_id'] == stage_id
-          deals_value += deal['value']
-        end
-      end
-
-      summary.merge!(dollar_value: deals_value)
-      output << summary
+      pipeline_summary << stage_summary
     end
 
-    Rails.logger.debug("Final output: #{output.inspect}")
-    output
+    Rails.logger.debug("Final output: #{pipeline_summary.inspect}")
+    pipeline_summary
+  end
+
+  def summarize_deals(name, stage, deals)
+    deals_value = 0
+    stage_id = stage['id']
+    deals.each do |deal|
+      if deal['stage_id'] == stage_id
+        deals_value += deal['value']
+      end
+    end
+
+    {
+      name: name,
+      dollar_value: deals_value,
+      deal_count: deals.size
+    }
   end
 
   def get_pipeline(name)
@@ -63,7 +74,9 @@ class PipedriveDeals < DataIntake
 
   def get_pipeline_deals(pipeline_id)
     deals_uri_component = "pipelines/#{pipeline_id}/deals"
-    data_from_uri(deals_uri_component)
+    pipeline_deals = data_from_uri(deals_uri_component)
+
+    pipeline_deals.delete_if { |deal| deal['status'] != 'open' }
   end
 
   def filter_pipeline_deals(deals, filter_names)

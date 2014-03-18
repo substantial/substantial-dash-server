@@ -14,7 +14,7 @@ describe PipedriveDeals do
   let(:filter) { JSON.parse(filter_data)['data'] }
   let(:stages) { JSON.parse(stages_data)['data'] }
   let(:pipelines) { JSON.parse(pipelines_data)['data'] }
-  let(:filter_names) { 'SF' }
+  let(:filter_names) { 'SF'.split(',') }
 
   before do
     ENV.stub(:[]).with('INTAKE_PIPEDRIVE_API_URL').and_return('http://www.meow.com')
@@ -132,11 +132,13 @@ describe PipedriveDeals do
   end
 
   describe '#export' do
+    let(:unfiltered_deals) { deals.reject { |deal| deal['status'] != 'open' } }
+    let(:filtered_deals) { deals.reject { |deal| (deal['status'] != 'open' || (deal['user_id'] != 158906 && deal['user_id'] != 161873)) } }
     before do
       PipedriveDeals.any_instance.stub(:data_from_uri).with('stages').and_return(stages)
     end
     let(:pipeline_stages) { subject.pipeline_stages(1).reverse! }
-    let(:returns) { subject.export(pipeline_stages, deals) }
+    let(:returns) { subject.export(pipeline_stages, 'Substantial', filter_names[0], unfiltered_deals, filtered_deals) }
 
     it 'returns an array' do
       expect(:returns).is_a?(Array)
@@ -144,23 +146,45 @@ describe PipedriveDeals do
 
     it 'sorts output as per stages` order_nr property' do
       pipeline_stages.sort! { |x,y| x['order_nr'] <=> y['order_nr'] }
-
       pipeline_stages.each_with_index do |val, i|
         expect(returns[i][:name]).to eq(val['name'])
       end
     end
 
-    it 'adds up dollar values properly' do
-      puts returns.inspect
-      expect(returns.detect{ |v| v[:name] == 'Opportunity' }[:dollar_value]).to eq(10000)
-      expect(returns.detect{ |v| v[:name] == 'Qualified' }[:dollar_value]).to eq(175000)
-      expect(returns.detect{ |v| v[:name] == 'Pursuing' }[:dollar_value]).to eq(0)
-      expect(returns.detect{ |v| v[:name] == 'Proposed' }[:dollar_value]).to eq(0)
-      expect(returns.detect{ |v| v[:name] == 'In Negotiation' }[:dollar_value]).to eq(0)
+    it 'adds up dollar values properly for filtered data' do
+      expect(returns.detect{ |v| v[:name] == 'Opportunity' }[:datasets][0][:dollar_value]).to eq(10000)
+      expect(returns.detect{ |v| v[:name] == 'Qualified' }[:datasets][0][:dollar_value]).to eq(150000)
+      expect(returns.detect{ |v| v[:name] == 'Pursuing' }[:datasets][0][:dollar_value]).to eq(0)
+      expect(returns.detect{ |v| v[:name] == 'Proposed' }[:datasets][0][:dollar_value]).to eq(0)
+      expect(returns.detect{ |v| v[:name] == 'In Negotiation' }[:datasets][0][:dollar_value]).to eq(0)
     end
 
-    it 'exports deal probability' do
-      expect(returns[0][:deal_probability]).to eq(20)
+    it 'adds up dollar values properly for unfiltered data' do
+      expect(returns.detect{ |v| v[:name] == 'Opportunity' }[:datasets][1][:dollar_value]).to eq(10000)
+      expect(returns.detect{ |v| v[:name] == 'Qualified' }[:datasets][1][:dollar_value]).to eq(150000)
+      expect(returns.detect{ |v| v[:name] == 'Pursuing' }[:datasets][1][:dollar_value]).to eq(0)
+      expect(returns.detect{ |v| v[:name] == 'Proposed' }[:datasets][1][:dollar_value]).to eq(551250)
+      expect(returns.detect{ |v| v[:name] == 'In Negotiation' }[:datasets][1][:dollar_value]).to eq(0)
+    end
+
+    it 'adds up deal count properly for filtered data' do
+      expect(returns.detect{ |v| v[:name] == 'Opportunity' }[:datasets][0][:deal_count]).to eq(1)
+      expect(returns.detect{ |v| v[:name] == 'Qualified' }[:datasets][0][:deal_count]).to eq(2)
+      expect(returns.detect{ |v| v[:name] == 'Pursuing' }[:datasets][0][:deal_count]).to eq(0)
+      expect(returns.detect{ |v| v[:name] == 'Proposed' }[:datasets][0][:deal_count]).to eq(0)
+      expect(returns.detect{ |v| v[:name] == 'In Negotiation' }[:datasets][0][:deal_count]).to eq(0)
+    end
+
+    it 'adds up deal count properly for unfiltered data' do
+      expect(returns.detect{ |v| v[:name] == 'Opportunity' }[:datasets][1][:deal_count]).to eq(1)
+      expect(returns.detect{ |v| v[:name] == 'Qualified' }[:datasets][1][:deal_count]).to eq(2)
+      expect(returns.detect{ |v| v[:name] == 'Pursuing' }[:datasets][1][:deal_count]).to eq(0)
+      expect(returns.detect{ |v| v[:name] == 'Proposed' }[:datasets][1][:deal_count]).to eq(1)
+      expect(returns.detect{ |v| v[:name] == 'In Negotiation' }[:datasets][1][:deal_count]).to eq(0)
+    end
+
+    it 'exports two datasets for each stage' do
+      returns.each { |stage| expect(stage[:datasets].size).to eq(2) }
     end
   end
 
