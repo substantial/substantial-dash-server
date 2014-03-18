@@ -76,6 +76,10 @@ class PipedriveDeals < DataIntake
     deals_uri_component = "pipelines/#{pipeline_id}/deals"
     pipeline_deals = data_from_uri(deals_uri_component)
 
+    if pipeline_deals.nil?
+      pipeline_deals = []
+    end
+
     pipeline_deals.delete_if { |deal| deal['status'] != 'open' }
   end
 

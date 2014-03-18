@@ -14,7 +14,7 @@ describe PipedriveDeals do
   let(:filter) { JSON.parse(filter_data)['data'] }
   let(:stages) { JSON.parse(stages_data)['data'] }
   let(:pipelines) { JSON.parse(pipelines_data)['data'] }
-  let(:filter_names) { 'SF'.split(',') }
+  let(:filter_names) { 'SF'.split(',')[0] }
 
   before do
     ENV.stub(:[]).with('INTAKE_PIPEDRIVE_API_URL').and_return('http://www.meow.com')
@@ -115,19 +115,19 @@ describe PipedriveDeals do
 
     it 'should filter deals according to the filter' do
       returns = subject.filter_pipeline_deals(deals, filter_names)
-      expect(returns.size).to eq(2)
+      expect(returns.size).to eq(3)
     end
 
     it 'should return all deals if filter name is empty' do
       empty_filter_names = ''
       filtered_deals = subject.filter_pipeline_deals(deals, empty_filter_names )
-      expect(filtered_deals.size).to eq(4)
+      expect(filtered_deals.size).to eq(5)
     end
 
     it 'should return all deals if pipedrive API returns no filters' do
       PipedriveDeals.any_instance.stub(:data_from_uri).with('filters').and_return([])
       filtered_deals = subject.filter_pipeline_deals(deals, filter_names)
-      expect(filtered_deals.size).to eq(4)
+      expect(filtered_deals.size).to eq(5)
     end
   end
 
