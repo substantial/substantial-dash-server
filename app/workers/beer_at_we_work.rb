@@ -3,21 +3,24 @@ require 'net/http'
 
 class BeerAtWeWork < DataIntake
 
-  recurrence { secondly(10) }
+  recurrence { minutely(1) }
 
   def intake
     data = get_beer_data
+
+    data.sort! { |x,y| y['floor'] <=> x['floor'] }
 
     Rails.logger.debug(data.inspect)
     data
   end
 
 
-  def get_beer_data()
-    data_url = ENV['INTAKE_BEER_LOCATOR_DATA_URL']
+  def get_beer_data
+    env_var_name = 'INTAKE_BEER_AT_WE_WORK_DATA_URL'
+    data_url = ENV[env_var_name]
 
     if data_url.nil?
-      Rails.logger.error "Environment variable 'INTAKE_BEER_LOCATOR_DATA_URL' is not specified"
+      Rails.logger.error "Environment variable '#{env_var_name}' is not specified"
     end
 
     uri = URI(data_url)
