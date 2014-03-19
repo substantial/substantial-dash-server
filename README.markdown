@@ -40,6 +40,8 @@ Set-up the **.envrc** file containing auth keys:
 
 Then, execute `direnv allow`
 
+Configure your specific Dash's **bayeux_url** in *config/environment.rb* and child *config/environments/\**. The default config should work for local development; each production Dash will require it's own unique *config/environments/production.rb*.
+
 ### Testing
 
 Run the test suite:
