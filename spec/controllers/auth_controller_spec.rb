@@ -55,7 +55,7 @@ describe AuthController do
 
       it "redirects with the API key" do
         get :callback, provider: 'google_apps'
-        expect(response.location).to match(/api_key=.+%3D%3D/)
+        expect(response.location).to match(/api_key=[-a-f0-9]{36}/)
       end
 
       it "redirects with the user's name" do

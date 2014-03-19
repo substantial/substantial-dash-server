@@ -10,7 +10,7 @@ class AuthController < ApplicationController
   def callback
     auth_data = request.env['omniauth.auth']
     @user_name = auth_data['info']['name']
-    @api_read_key = SecureRandom.base64
+    @api_read_key = SecureRandom.uuid
     $redis.mapped_hmset("#{SubscriberAuth::KEY_PREFIX}#{@api_read_key}", auth_data.slice('provider', 'uid', 'info'))
 
     # Redirect if we captured a referring URL. Otherwise render.
