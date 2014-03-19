@@ -77,4 +77,7 @@ SubstantialDashServer::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  # Set so Sidekiq Workers can publish to the Faye::Server
+  # config.bayeux_url = "https://dash-api.my-amazing-company.com/bayeux"
 end
