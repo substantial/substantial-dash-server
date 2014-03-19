@@ -56,12 +56,13 @@ class DataIntake
     name.underscore.dasherize
   end
 
-  def self.redis_channel_name
-    "intake:#{channel_name}"
+  def self.redis_channel_name(alt_name=nil)
+    name = alt_name || channel_name
+    "intake:#{name}"
   end
 
-  def self.redis_buffer_key
-    "#{redis_channel_name}:buffer"
+  def self.redis_buffer_key(alt_name=nil)
+    "#{redis_channel_name(alt_name)}:buffer"
   end
 
   def channel_name
