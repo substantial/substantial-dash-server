@@ -41,7 +41,9 @@ RSpec.configure do |config|
   config.order = "random"
 
   config.before(:each) do
-    $redis.flushdb
+    # Flush the namespace ($redis.flushdb would clear other namespaces too)
+    keys = $redis.keys("*")
+    $redis.del(*keys) unless keys.empty?
   end
 end
 
