@@ -25,6 +25,10 @@ class PublisherAuth
     end
 
     callback.call(message)
+
+  rescue => e
+    Rails.logger.error("#{e.class} in #{self.class}: #{e.message} at #{e.backtrace.first} for #{message.inspect}")
+    raise
   end
 
   # Faye extension to allow publishing to the server implementing PublisherAuth.
@@ -41,6 +45,10 @@ class PublisherAuth
       message['ext']['apiKey'] = ENV['BAYEUX_PUBLISH_KEY']
 
       callback.call(message)
+
+    rescue => e
+      Rails.logger.error("#{e.class} in #{self.class}: #{e.message} at #{e.backtrace.first} for #{message.inspect}")
+      raise
     end
   end
 end

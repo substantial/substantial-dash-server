@@ -28,5 +28,9 @@ class SubscriberAuth
     end
 
     callback.call(message)
+
+  rescue => e
+    Rails.logger.error("#{e.class} in #{self.class}: #{e.message} at #{e.backtrace.first} for #{message.inspect}")
+    raise
   end
 end
