@@ -58,6 +58,9 @@ class DataIntake
 
   def self.redis_channel_name(alt_name=nil)
     name = alt_name || channel_name
+    # Literal subscription names are prefixed by "/", so for 
+    # convenience remove it here.
+    name = name.gsub(/^\//, '')
     "intake:#{name}"
   end
 
