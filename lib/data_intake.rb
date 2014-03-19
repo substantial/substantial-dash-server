@@ -1,6 +1,7 @@
 class DataIntake
   include Sidekiq::Worker
   include Sidetiq::Schedulable
+  sidekiq_options :retry => 1
 
   # Schedule a recurrence in subclasses (commented out in superclass):
   #
