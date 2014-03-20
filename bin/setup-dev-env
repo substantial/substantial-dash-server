@@ -1,0 +1,27 @@
+#! /bin/bash
+cd "$( dirname "$0" )/.."
+set -e
+
+RUBY_VERSION=`cat .ruby-version`
+if rvm list rubies | grep -q "$RUBY_VERSION"
+then
+  echo "ruby version $RUBY_VERSION already installed"
+else
+  echo "installing $RUBY_VERSION"
+  rvm install $RUBY_VERSION
+fi
+
+type -P bundler || gem install bundler
+
+bundle install --path vendor/bundle
+
+[ -f .envrc ] || cp .envrc.example .envrc
+type -P direnv || brew install direnv
+
+direnv allow
+
+echo
+echo 'Setup complete!'
+read -p "Edit .envrc now? (y/N)" -n 1 -r
+echo
+[[ $REPLY =~ ^[Yy]$ ]] && $EDITOR .envrc
