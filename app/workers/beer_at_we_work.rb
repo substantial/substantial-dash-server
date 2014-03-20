@@ -14,7 +14,6 @@ class BeerAtWeWork < DataIntake
     data
   end
 
-
   def get_beer_data
     env_var_name = 'INTAKE_BEER_AT_WE_WORK_DATA_URL'
     data_url = ENV[env_var_name]

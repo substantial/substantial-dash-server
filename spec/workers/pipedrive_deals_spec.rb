@@ -14,7 +14,7 @@ describe PipedriveDeals do
   let(:filter) { JSON.parse(filter_data)['data'] }
   let(:stages) { JSON.parse(stages_data)['data'] }
   let(:pipelines) { JSON.parse(pipelines_data)['data'] }
-  let(:filter_names) { 'SF'.split(',')[0] }
+  let(:filter_names) { 'SF' }
 
   before do
     ENV.stub(:[]).with('INTAKE_PIPEDRIVE_API_URL').and_return('http://www.meow.com')
@@ -83,8 +83,7 @@ describe PipedriveDeals do
   end
 
   describe '#get stages for pipeline' do
-    let(:response) { FakeHttpResponse.new('200', stages_data) }
-    before { Net::HTTP.stub(:start).and_return(response) }
+    before { PipedriveDeals.any_instance.stub(:data_from_uri).with('stages').and_return(stages) }
     let(:pipeline_id) { 1 }
 
     it 'passes proper URL fragment' do
@@ -101,9 +100,18 @@ describe PipedriveDeals do
       # 5 stages in the pipeline; set active_flag of one of them to false,
       # to make sure that stage is  skipped
       stages[0]['active_flag'] = false
-      PipedriveDeals.any_instance.stub(:data_from_uri).with('stages').and_return(stages)
       stages = subject.pipeline_stages(pipeline_id)
       expect(stages.size).to eq(4)
+    end
+
+    it 'preserves pipedrive stages sort order' do
+      returned_stages = subject.pipeline_stages(pipeline_id)
+      returned_stages.each_with_index do |stage, i|
+        if i == 0
+          next
+        end
+        expect(stage['order_nr']).to be > returned_stages[i-1]['order_nr']
+      end
     end
   end
 
@@ -137,54 +145,38 @@ describe PipedriveDeals do
     before do
       PipedriveDeals.any_instance.stub(:data_from_uri).with('stages').and_return(stages)
     end
-    let(:pipeline_stages) { subject.pipeline_stages(1).reverse! }
-    let(:returns) { subject.export(pipeline_stages, 'Substantial', filter_names[0], unfiltered_deals, filtered_deals) }
+    let(:pipeline_stages) { subject.pipeline_stages(1) }
+    let(:deals_by_filter) { [{filter_name: 'Substantial', deals: unfiltered_deals}, {filter_name: 'SF', deals: filtered_deals}] }
+    let(:returns) { subject.export(pipeline_stages, deals_by_filter) }
 
     it 'returns an array' do
       expect(:returns).is_a?(Array)
     end
 
-    it 'sorts output as per stages` order_nr property' do
-      pipeline_stages.sort! { |x,y| x['order_nr'] <=> y['order_nr'] }
-      pipeline_stages.each_with_index do |val, i|
-        expect(returns[i][:name]).to eq(val['name'])
-      end
-    end
-
     it 'adds up dollar values properly for filtered data' do
-      expect(returns.detect{ |v| v[:name] == 'Opportunity' }[:datasets][0][:dollar_value]).to eq(10000)
-      expect(returns.detect{ |v| v[:name] == 'Qualified' }[:datasets][0][:dollar_value]).to eq(150000)
-      expect(returns.detect{ |v| v[:name] == 'Pursuing' }[:datasets][0][:dollar_value]).to eq(0)
-      expect(returns.detect{ |v| v[:name] == 'Proposed' }[:datasets][0][:dollar_value]).to eq(0)
-      expect(returns.detect{ |v| v[:name] == 'In Negotiation' }[:datasets][0][:dollar_value]).to eq(0)
+      #SF
+      expect(returns[0][:filters][0][:dollar_value]).to eq (10000)
+      expect(returns[1][:filters][0][:dollar_value]).to eq (150000)
+      expect(returns[2][:filters][0][:dollar_value]).to eq (0)
+      expect(returns[3][:filters][0][:dollar_value]).to eq (551250)
+      expect(returns[4][:filters][0][:dollar_value]).to eq (0)
+
+      #Substantial
+      expect(returns[0][:filters][1][:dollar_value]).to eq (10000)
+      expect(returns[1][:filters][1][:dollar_value]).to eq (150000)
+      expect(returns[2][:filters][1][:dollar_value]).to eq (0)
+      expect(returns[3][:filters][1][:dollar_value]).to eq (0)
+      expect(returns[4][:filters][1][:dollar_value]).to eq (0)
     end
 
-    it 'adds up dollar values properly for unfiltered data' do
-      expect(returns.detect{ |v| v[:name] == 'Opportunity' }[:datasets][1][:dollar_value]).to eq(10000)
-      expect(returns.detect{ |v| v[:name] == 'Qualified' }[:datasets][1][:dollar_value]).to eq(150000)
-      expect(returns.detect{ |v| v[:name] == 'Pursuing' }[:datasets][1][:dollar_value]).to eq(0)
-      expect(returns.detect{ |v| v[:name] == 'Proposed' }[:datasets][1][:dollar_value]).to eq(551250)
-      expect(returns.detect{ |v| v[:name] == 'In Negotiation' }[:datasets][1][:dollar_value]).to eq(0)
+    it 'exports an array the size of number of stages' do
+      expect(returns.size).to eq(pipeline_stages.size)
     end
 
-    it 'adds up deal count properly for filtered data' do
-      expect(returns.detect{ |v| v[:name] == 'Opportunity' }[:datasets][0][:deal_count]).to eq(1)
-      expect(returns.detect{ |v| v[:name] == 'Qualified' }[:datasets][0][:deal_count]).to eq(2)
-      expect(returns.detect{ |v| v[:name] == 'Pursuing' }[:datasets][0][:deal_count]).to eq(0)
-      expect(returns.detect{ |v| v[:name] == 'Proposed' }[:datasets][0][:deal_count]).to eq(0)
-      expect(returns.detect{ |v| v[:name] == 'In Negotiation' }[:datasets][0][:deal_count]).to eq(0)
-    end
-
-    it 'adds up deal count properly for unfiltered data' do
-      expect(returns.detect{ |v| v[:name] == 'Opportunity' }[:datasets][1][:deal_count]).to eq(1)
-      expect(returns.detect{ |v| v[:name] == 'Qualified' }[:datasets][1][:deal_count]).to eq(2)
-      expect(returns.detect{ |v| v[:name] == 'Pursuing' }[:datasets][1][:deal_count]).to eq(0)
-      expect(returns.detect{ |v| v[:name] == 'Proposed' }[:datasets][1][:deal_count]).to eq(1)
-      expect(returns.detect{ |v| v[:name] == 'In Negotiation' }[:datasets][1][:deal_count]).to eq(0)
-    end
-
-    it 'exports two datasets for each stage' do
-      returns.each { |stage| expect(stage[:datasets].size).to eq(2) }
+    it 'exports same amount of values for each key' do
+      returns.each do |stage_summary|
+        expect(stage_summary[:filters].size).to eq(deals_by_filter.size)
+      end
     end
   end
 
@@ -197,6 +189,10 @@ describe PipedriveDeals do
       PipedriveDeals.any_instance.stub(:data_from_uri).with('pipelines/1/deals').and_return(deals)
     end
     let(:returns) { subject.intake }
+
+    it 'returns an array' do
+      expect(returns).is_a?(Array)
+    end
 
     it 'returns correct amount of items' do
       expect(returns.size).to eq(5)

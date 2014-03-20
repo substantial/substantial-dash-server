@@ -11,31 +11,32 @@ class PipedriveDeals < DataIntake
 
     pipeline = get_pipeline(pipeline_name)
     pipeline_id = pipeline['id']
-    pipeline_deals = get_pipeline_deals(pipeline_id)
-    pipeline_deals_filtered = filter_pipeline_deals(pipeline_deals, filter_names)
+    all_deals = get_pipeline_deals(pipeline_id)
+    deals_filtered = filter_pipeline_deals(all_deals, filter_names)
     pipeline_stages = pipeline_stages(pipeline_id)
 
     # aggregate
-    export(pipeline_stages, 'Substantial', filter_names.split(',')[0], pipeline_deals, pipeline_deals_filtered)
+    filter_name = filter_names.split(',')[0] #ew
+
+    deals_by_filter = [ { filter_name: 'Substantial', deals: all_deals },
+                        { filter_name:  filter_name, deals: deals_filtered } ]
+
+    export(pipeline_stages, deals_by_filter)
   end
 
-  def export(stages, unfiltered_name, filtered_name, unfiltered_deals, filtered_deals)
+  def export(stages, deals_by_filter)
     pipeline_summary = []
 
-    if stages.nil? || stages.empty? || unfiltered_deals.nil? || unfiltered_deals.empty?
+    if stages.nil? || stages.empty? || deals_by_filter.nil? || deals_by_filter.empty?
       return pipeline_summary
     end
 
-    stages.sort! { |x,y| x['order_nr'] <=> y['order_nr'] }
-
     stages.each do |stage|
-      filtered_deals_summarized = summarize_deals(filtered_name, stage, filtered_deals.reject{ |deal| deal['stage_id'] != stage['id'] })
-      unfiltered_deals_summarized = summarize_deals(unfiltered_name, stage, unfiltered_deals.reject{ |deal| deal['stage_id'] != stage['id'] })
+      stage_summary = { stage_name: stage['name'], filters: [] }
 
-      stage_summary = {
-          name: stage['name'],
-          datasets: [filtered_deals_summarized, unfiltered_deals_summarized]
-      }
+      deals_by_filter.each do |filter|
+        stage_summary[:filters] << summarize_filter_deals(stage, filter[:deals], filter[:filter_name])
+      end
 
       pipeline_summary << stage_summary
     end
@@ -44,19 +45,21 @@ class PipedriveDeals < DataIntake
     pipeline_summary
   end
 
-  def summarize_deals(name, stage, deals)
+  def summarize_filter_deals(stage, deals, filter_name)
     deals_value = 0
+    deal_count = 0
     stage_id = stage['id']
     deals.each do |deal|
       if deal['stage_id'] == stage_id
         deals_value += deal['value']
+        deal_count += 1;
       end
     end
 
     {
-      name: name,
+      name: filter_name,
       dollar_value: deals_value,
-      deal_count: deals.size
+      deal_count: deal_count
     }
   end
 
@@ -132,7 +135,9 @@ class PipedriveDeals < DataIntake
   def pipeline_stages(pipeline_id)
     all_stages = data_from_uri('stages')
     if all_stages && all_stages.is_a?(Array)
-      all_stages.select { |stage| stage['pipeline_id'] == pipeline_id && stage['active_flag'] }
+      all_stages.delete_if { |stage| stage['pipeline_id'] != pipeline_id || !stage['active_flag'] }
+
+      all_stages.sort! { |x,y| x['order_nr'] <=> y['order_nr'] }
     end
   end
 
