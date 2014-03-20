@@ -26,7 +26,7 @@ Designed to broadcast data to [Substantial Dash client](https://github.com/subst
     cd substantial-dash-server/
     bin/setup-dev-env
 
-Configure your specific Dash's **bayeux_url** in *config/environment.rb* and child *config/environments/\**. The default config should work for local development; each production Dash will require it's own unique *config/environments/production.rb*.
+Configure your specific Dash's **bayeux_url** in *config/environment.rb* and child *config/environments/\**. The default config should work for local development; each production Dash will require its own unique *config/environments/production.rb*.
 
 ### Testing
 
@@ -35,9 +35,9 @@ Run the test suite:
     bundle exec rspec
 
 ### Boot-up
-    
+
 Start the server at http://0.0.0.0:8001
-    
+
     bundle exec puma -p 8001 --config config/puma.rb
 
 ...and in another terminal, the background workers:
