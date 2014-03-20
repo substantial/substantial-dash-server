@@ -22,9 +22,11 @@ Designed to broadcast data to [Substantial Dash client](https://github.com/subst
 * `brew install redis` & follow resulting directions to start the server or add launcher
 
 ### Install
+```sh
     git clone git@github.com:substantial/substantial-dash-server.git
     cd substantial-dash-server/
     bin/setup-dev-env
+```
 
 Configure your specific Dash's **bayeux_url** in *config/environment.rb* and child *config/environments/\**. The default config should work for local development; each production Dash will require its own unique *config/environments/production.rb*.
 
@@ -32,14 +34,20 @@ Configure your specific Dash's **bayeux_url** in *config/environment.rb* and chi
 
 Run the test suite:
 
-    bundle exec rspec
+```sh
+bundle exec rspec
+```
 
 ### Boot-up
 
 Start the server at http://0.0.0.0:8001
 
-    bundle exec puma -p 8001 --config config/puma.rb
+```sh
+bundle exec puma -p 8001 --config config/puma.rb
+```
 
 ...and in another terminal, the background workers:
 
-    bundle exec sidekiq
+```sh
+bundle exec sidekiq
+```
