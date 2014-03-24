@@ -68,7 +68,7 @@ class IcalendarUpcoming < DataIntake
         events << event
       end
     end
-    events = events.select {|event| event.dtstart > now }
+    events = events.select {|event| event.dtend > now }
     events = events.sort_by {|event| event.dtstart }
     events
   end
