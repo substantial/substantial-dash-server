@@ -71,4 +71,5 @@ gem 'omniauth'
 gem 'omniauth-google-apps'
 gem 'openid-store-redis'
 
-gem 'redis-session-store'
+# Redis-backed session & cache stores.
+gem 'redis-rails'

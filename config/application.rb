@@ -11,6 +11,9 @@ require "action_mailer/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(:default, Rails.env)
 
+# Set the namespace before loading anything Redis-related.
+REDIS_NAMESPACE = "dash-#{Rails.env.downcase}"
+
 module SubstantialDashServer
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -27,5 +30,10 @@ module SubstantialDashServer
 
     # Set so Sidekiq Workers can publish to the Faye::Server
     config.bayeux_url = "http://0.0.0.0:8001/bayeux"
+
+    config.cache_store = :redis_store, { 
+      namespace: "#{REDIS_NAMESPACE}-cache",
+      expires_after: 90.minutes
+    }
   end
 end
