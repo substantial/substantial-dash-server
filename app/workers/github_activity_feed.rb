@@ -1,7 +1,7 @@
 require 'data_intake'
 require 'net/http'
 
-class GithubOrgFeedSubstantialSf < DataIntake
+class GithubActivityFeed < DataIntake
 
   recurrence { minutely(1) }
 
