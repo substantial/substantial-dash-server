@@ -39,8 +39,12 @@ class GithubTeamNotices < DataIntake
   def octokit
     return @octokit if @octokit
     stack = Faraday::RackBuilder.new do |builder|
-      builder.response :logger
-      builder.use Faraday::HttpCache
+      #builder.response :logger
+      builder.use Faraday::HttpCache, {
+        #logger: Rails.logger,
+        store: Rails.cache,
+        shared_cache: false # cache even though "Cache-Control: Private" 
+      }
       builder.use Octokit::Response::RaiseError
       builder.adapter Faraday.default_adapter
     end
