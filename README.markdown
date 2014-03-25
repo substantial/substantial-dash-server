@@ -22,38 +22,32 @@ Designed to broadcast data to [Substantial Dash client](https://github.com/subst
 * `brew install redis` & follow resulting directions to start the server or add launcher
 
 ### Install
-
+```sh
     git clone git@github.com:substantial/substantial-dash-server.git
     cd substantial-dash-server/
-    bundle install --path vendor/bundle
+    bin/setup-dev-env
+```
 
-Set-up the **.envrc** file containing auth keys:
-
-    export BAYEUX_PUBLISH_KEY=XXXXX
-    export INTAKE_GITHUB_API_ORG_FEED_URL=https://api.github.com/...
-    export INTAKE_GITHUB_API_TOKEN=XXXXX
-    export INTAKE_GOOGLE_ICALENDAR_URL=https://www.google.com/calendar/ical/...
-    export INTAKE_PIPEDRIVE_FILTER_NAMES='...'
-    export INTAKE_PIPEDRIVE_PIPELINE_NAME='...'
-    export INTAKE_PIPEDRIVE_API_URL=https://api.pipedrive.com/v1
-    export INTAKE_PIPEDRIVE_API_TOKEN=...
-
-Then, execute `direnv allow`
-
-Configure your specific Dash's **bayeux_url** in *config/environment.rb* and child *config/environments/\**. The default config should work for local development; each production Dash will require it's own unique *config/environments/production.rb*.
+Configure your specific Dash's **bayeux_url** in *config/environment.rb* and child *config/environments/\**. The default config should work for local development; each production Dash will require its own unique *config/environments/production.rb*.
 
 ### Testing
 
 Run the test suite:
 
-    bundle exec rspec
+```sh
+bundle exec rspec
+```
 
 ### Boot-up
-    
+
 Start the server at http://0.0.0.0:8001
-    
-    bundle exec puma -p 8001 --config config/puma.rb
+
+```sh
+bundle exec puma -p 8001 --config config/puma.rb
+```
 
 ...and in another terminal, the background workers:
 
-    bundle exec sidekiq
+```sh
+bundle exec sidekiq
+```
