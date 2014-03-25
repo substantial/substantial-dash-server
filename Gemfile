@@ -73,3 +73,8 @@ gem 'openid-store-redis'
 
 # Redis-backed session & cache stores.
 gem 'redis-rails'
+
+# GitHub hypermedia API
+gem 'octokit', '~> 2.0.0'
+# ETag-aware response caching
+gem 'faraday-http-cache'

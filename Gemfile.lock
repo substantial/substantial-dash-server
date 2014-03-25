@@ -45,8 +45,15 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.0)
+    columnize (0.3.6)
     connection_pool (1.2.0)
     cookiejar (0.3.1)
+    debugger (1.6.6)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.2.0)
+      debugger-ruby_core_source (~> 1.3.2)
+    debugger-linecache (1.2.0)
+    debugger-ruby_core_source (1.3.2)
     diff-lcs (1.2.5)
     em-http-request (1.1.2)
       addressable (>= 2.3.4)
@@ -59,6 +66,10 @@ GEM
     erubis (2.7.0)
     eventmachine (1.0.3)
     execjs (2.0.2)
+    faraday (0.9.0)
+      multipart-post (>= 1.2, < 3)
+    faraday-http-cache (0.4.0)
+      faraday (~> 0.8)
     faye (1.0.1)
       cookiejar (>= 0.3.0)
       em-http-request (>= 0.3.0)
@@ -88,6 +99,9 @@ GEM
     mime-types (1.25.1)
     minitest (4.7.5)
     multi_json (1.8.4)
+    multipart-post (2.0.0)
+    octokit (2.0.0)
+      sawyer (~> 0.3.0)
     omniauth (1.2.1)
       hashie (>= 1.2, < 3)
       rack (~> 1.0)
@@ -173,6 +187,9 @@ GEM
       railties (>= 4.0.0, < 5.0)
       sass (>= 3.1.10)
       sprockets-rails (~> 2.0.0)
+    sawyer (0.3.0)
+      faraday (~> 0.8, < 0.10)
+      uri_template (~> 0.5.0)
     sdoc (0.4.0)
       json (~> 1.8)
       rdoc (~> 4.0, < 5.0)
@@ -212,6 +229,7 @@ GEM
     uglifier (2.4.0)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    uri_template (0.5.3)
     websocket-driver (0.3.2)
 
 PLATFORMS
@@ -219,10 +237,13 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 4.0.0)
+  debugger
   em-rspec!
+  faraday-http-cache
   faye
   jbuilder (~> 1.2)
   jquery-rails
+  octokit (~> 2.0.0)
   omniauth
   omniauth-google-apps
   openid-store-redis
