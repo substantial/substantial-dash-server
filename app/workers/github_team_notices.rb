@@ -5,17 +5,29 @@ class GithubTeamNotices < DataIntake
   recurrence { minutely(1) }
 
   def intake
-    pull_requests
+    {
+      pull_requests: pull_requests
+    }
   end
 
   def pull_requests
     return @pull_requests if @pull_requests
     @pull_requests = []
     repos.each do |repo|
-      repo_prs = octokit.pull_requests(repo.full_name)
+      repo_prs = octokit.pull_requests(repo.full_name, 'open')
       @pull_requests.concat(repo_prs)
     end
     @pull_requests
+  end
+
+  def issues
+    return @issues if @issues
+    @issues = []
+    repos.each do |repo|
+      repo_issues = octokit.list_issues(repo.full_name, state: 'open')
+      @issues.concat(repo_issues)
+    end
+    @issues
   end
 
   def repos
