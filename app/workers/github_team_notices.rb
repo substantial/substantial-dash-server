@@ -5,7 +5,7 @@ class GithubTeamNotices < DataIntake
   recurrence { minutely(1) }
 
   def intake
-    pull_requests.to_json
+    pull_requests
   end
 
   def pull_requests
