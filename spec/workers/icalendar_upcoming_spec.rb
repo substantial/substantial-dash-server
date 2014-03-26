@@ -8,7 +8,7 @@ describe IcalendarUpcoming do
   let(:now) { Time.parse("2014-03-06 10:02:33 -0800") }
   before do
     Timecop.freeze(now)
-    ENV['INTAKE_GOOGLE_ICALENDAR_URL'] = 'http://not.a.real.url/will/not/be/resolved'
+    ENV.stub(:[]).with('INTAKE_GOOGLE_ICALENDAR_URL').and_return('http://not.a.real.url/will/not/be/resolved')
   end
   after do
     Timecop.return
