@@ -31,7 +31,7 @@ class DataIntake
     save_to_buffer(json)
 
     EM.run do
-      client = Faye::Client.new(Rails.application.config.bayeux_url)
+      client = Faye::Client.new(ENV['BAYEUX_URL'])
       client.add_extension(PublisherAuth::Client.new)
       publication = client.publish(bayeux_channel, json)
       publication.callback do

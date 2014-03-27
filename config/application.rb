@@ -34,9 +34,6 @@ module SubstantialDashServer
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # Set so Sidekiq Workers can publish to the Faye::Server
-    config.bayeux_url = "http://0.0.0.0:8001/bayeux"
-
     config.cache_store = :redis_store, "#{REDIS_URL}/0/", {
       expires_in: 90.minutes,
       namespace: "#{REDIS_NAMESPACE}-cache"

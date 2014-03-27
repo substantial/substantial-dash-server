@@ -29,6 +29,7 @@ Designed to broadcast data to [Substantial Dash client](https://github.com/subst
 
 Set-up the **.envrc** file containing auth keys:
 
+    export BAYEUX_URL="http://0.0.0.0:8001/bayeux"
     export BAYEUX_PUBLISH_KEY=XXXXX
     export INTAKE_GITHUB_API_ORG_FEED_URL=https://api.github.com/...
     export INTAKE_GITHUB_API_TOKEN=XXXXX
@@ -41,8 +42,6 @@ Set-up the **.envrc** file containing auth keys:
     export INTAKE_PIPEDRIVE_API_TOKEN=...
 
 Then, execute `direnv allow`
-
-Configure your specific Dash's **bayeux_url** in *config/environment.rb* and child *config/environments/\**. The default config should work for local development; each production Dash will require it's own unique *config/environments/production.rb*.
 
 ### Testing
 
