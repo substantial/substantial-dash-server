@@ -8,5 +8,5 @@ port        ENV['PORT']     || 3000
 environment ENV['RACK_ENV'] || 'development'
 
 on_restart do
-  $redis = Redis::Namespace.new(REDIS_NAMESPACE)
+  $redis = Redis::Namespace.new(REDIS_NAMESPACE, redis: Redis.new(url: REDIS_URL))
 end

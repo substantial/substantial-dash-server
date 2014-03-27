@@ -31,6 +31,7 @@ end
 gem 'puma'
 # Bidirectional, async client server (WebSockets)
 gem 'faye'
+gem 'faye-redis'
 # Pub/Sub system, and persistence.
 gem 'redis'
 gem 'redis-namespace'
