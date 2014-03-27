@@ -38,16 +38,10 @@ GEM
     builder (3.1.4)
     celluloid (0.15.2)
       timers (~> 1.1.0)
-    coffee-rails (4.0.1)
-      coffee-script (>= 2.2.0)
-      railties (>= 4.0.0, < 5.0)
-    coffee-script (2.2.0)
-      coffee-script-source
-      execjs
-    coffee-script-source (1.7.0)
     connection_pool (1.2.0)
     cookiejar (0.3.1)
     diff-lcs (1.2.5)
+    dotenv (0.10.0)
     em-http-request (1.1.2)
       addressable (>= 2.3.4)
       cookiejar
@@ -58,7 +52,6 @@ GEM
       eventmachine (>= 1.0.0.beta.4)
     erubis (2.7.0)
     eventmachine (1.0.3)
-    execjs (2.0.2)
     faraday (0.9.0)
       multipart-post (>= 1.2, < 3)
     faraday-http-cache (0.4.0)
@@ -74,17 +67,14 @@ GEM
     faye-websocket (0.7.2)
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.3.1)
+    foreman (0.63.0)
+      dotenv (>= 0.7)
+      thor (>= 0.13.6)
     hashie (2.0.5)
     hike (1.2.3)
     http_parser.rb (0.6.0)
     i18n (0.6.9)
     ice_cube (0.11.3)
-    jbuilder (1.5.3)
-      activesupport (>= 3.0.0)
-      multi_json (>= 1.2.0)
-    jquery-rails (3.1.0)
-      railties (>= 3.0, < 5.0)
-      thor (>= 0.14, < 2.0)
     json (1.8.1)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -120,6 +110,7 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    rack-timeout (0.0.4)
     rails (4.0.3)
       actionmailer (= 4.0.3)
       actionpack (= 4.0.3)
@@ -128,6 +119,11 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 4.0.3)
       sprockets-rails (~> 2.0.0)
+    rails_12factor (0.0.2)
+      rails_serve_static_assets
+      rails_stdout_logging
+    rails_serve_static_assets (0.0.2)
+    rails_stdout_logging (0.0.3)
     railties (4.0.3)
       actionpack (= 4.0.3)
       activesupport (= 4.0.3)
@@ -175,11 +171,6 @@ GEM
     ruby-openid (2.3.0)
     ruby-openid-apps-discovery (1.2.0)
       ruby-openid (>= 2.1.7)
-    sass (3.2.14)
-    sass-rails (4.0.1)
-      railties (>= 4.0.0, < 5.0)
-      sass (>= 3.1.10)
-      sprockets-rails (~> 2.0.0)
     sawyer (0.3.0)
       faraday (~> 0.8, < 0.10)
       uri_template (~> 0.5.0)
@@ -219,9 +210,6 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.38)
-    uglifier (2.4.0)
-      execjs (>= 0.3.0)
-      json (>= 1.8.0)
     uri_template (0.5.3)
     websocket-driver (0.3.2)
 
@@ -229,28 +217,26 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  coffee-rails (~> 4.0.0)
   em-rspec!
   faraday-http-cache
   faye
-  jbuilder (~> 1.2)
-  jquery-rails
+  foreman
   octokit (~> 2.0.0)
   omniauth
   omniauth-google-apps
   openid-store-redis
   puma
+  rack-timeout
   rails (= 4.0.3)
+  rails_12factor
   redis
   redis-namespace
   redis-rails
   ri_cal
   rspec
   rspec-rails
-  sass-rails (~> 4.0.0)
   sdoc
   sidekiq
   sidetiq
   sinatra (>= 1.3.0)
   timecop
-  uglifier (>= 1.3.0)
