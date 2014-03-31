@@ -51,10 +51,8 @@ Run the test suite:
 
 ### Boot-up
     
-Start the server at http://0.0.0.0:8001
+Start the application:
     
-    bundle exec puma -p 8001 --config config/puma.rb
+    PORT=8001 bundle exec foreman start
 
-...and in another terminal, the background workers:
-
-    bundle exec sidekiq
+...and visit [http://0.0.0.0:8001](http://0.0.0.0:8001) in your browser.
