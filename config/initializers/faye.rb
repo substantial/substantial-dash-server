@@ -1,6 +1,7 @@
 require 'subscriber_auth'
 require 'publisher_auth'
 require 'on_subscribe_send_buffer'
+require 'on_publish_set_buffer'
 
 Rails.application.config.middleware.use Faye::RackAdapter, {
   timeout: 28,
@@ -12,6 +13,7 @@ Rails.application.config.middleware.use Faye::RackAdapter, {
   extensions: [ 
     SubscriberAuth.new,
     PublisherAuth.new,
-    OnSubscribeSendBuffer.new 
+    OnSubscribeSendBuffer.new,
+    OnPublishSetBuffer.new 
   ]
 }

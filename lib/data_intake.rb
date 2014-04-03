@@ -28,7 +28,6 @@ class DataIntake
   #
   def publish(object)
     json = JSON.generate(object)
-    save_to_buffer(json)
 
     EM.run do
       client = Faye::Client.new(ENV['BAYEUX_URL'])
@@ -45,40 +44,12 @@ class DataIntake
     end
   end
 
-  def save_to_buffer(data)
-    $redis.set(redis_buffer_key, data)
-  end
-
-  def self.read_from_buffer
-    $redis.get(redis_buffer_key)
-  end
-
   def self.channel_name
     name.underscore.dasherize
   end
 
-  def self.redis_channel_name(alt_name=nil)
-    name = alt_name || channel_name
-    # Literal subscription names are prefixed by "/", so for 
-    # convenience remove it here.
-    name = name.gsub(/^\//, '')
-    "intake:#{name}"
-  end
-
-  def self.redis_buffer_key(alt_name=nil)
-    "#{redis_channel_name(alt_name)}:buffer"
-  end
-
   def channel_name
     self.class.channel_name
-  end
-
-  def redis_channel_name
-    self.class.redis_channel_name
-  end
-
-  def redis_buffer_key
-    self.class.redis_buffer_key
   end
 
   def bayeux_channel

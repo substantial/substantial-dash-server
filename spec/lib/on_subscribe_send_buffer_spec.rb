@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'faye_channel_buffer'
 require 'on_subscribe_send_buffer'
 
 describe OnSubscribeSendBuffer do
@@ -14,7 +15,7 @@ describe OnSubscribeSendBuffer do
     end
 
     describe "with valid API key" do
-      let(:buffer_key) { DataIntake.redis_buffer_key(message['subscription']) }
+      let(:buffer_key) { FayeChannelBuffer.key(message['subscription']) }
       let(:api_key) { 'keyfoo' }
       before do
         message['ext'] = {

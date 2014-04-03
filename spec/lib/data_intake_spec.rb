@@ -17,14 +17,7 @@ describe DataIntake do
       EM.stub(:run).and_yield
     end
 
-    it 'should buffer the new data in Redis' do
-      Redis.any_instance.should_receive(:set)
-        .with(namespaced_buffer_key, json_input)
-      subject.publish(input)
-    end
-
     it 'should publish to the bayeaux subscribers' do
-      Redis.any_instance.should_receive(:set)
       Faye::Client.any_instance.should_receive(:publish)
         .with(subject.bayeux_channel, json_input).and_call_original
       subject.publish(input)
@@ -34,18 +27,6 @@ describe DataIntake do
   describe '#channel_name' do
     it 'should be the dasherized class name' do
       expect(subject.channel_name).to eq('data-intake')
-    end
-  end
-
-  describe '#redis_channel_name' do
-    it 'should prefix the channel name with "intake:"' do
-      expect(subject.redis_channel_name).to eq('intake:' + subject.channel_name)
-    end
-  end
-
-  describe '#redis_buffer_key' do
-    it 'should suffix the Redis channel name with ":buffer"' do
-      expect(subject.redis_buffer_key).to eq(subject.redis_channel_name + ':buffer')
     end
   end
 
