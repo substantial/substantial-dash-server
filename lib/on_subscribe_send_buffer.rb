@@ -1,4 +1,4 @@
-require 'data_intake'
+require 'faye_channel_buffer'
 require 'publisher_auth'
 
 # Faye extension that immediately pushes the most recent event from 
@@ -36,15 +36,15 @@ class OnSubscribeSendBuffer
     end
 
     # Publish last buffered channel data to the client's personal channel
-    bayeux_personal_channel = "/personal/#{api_key}#{subscription}"
-    buffer_key = DataIntake.redis_buffer_key(subscription)
-    if buffered_data = $redis.get(buffer_key)
-      publication = client.publish(bayeux_personal_channel, buffered_data)
+    personal_channel = bayeux_personal_channel(api_key, subscription)
+    key = FayeChannelBuffer.key(subscription)
+    if buffered_data = $redis.get(key)
+      publication = client.publish(personal_channel, buffered_data)
       publication.callback do
-        Rails.logger.debug("bayeaux published to `#{bayeux_personal_channel}`")
+        Rails.logger.debug("bayeaux published to `#{personal_channel}`")
       end
       publication.errback do |error|
-        Rails.logger.error("bayeaux publish failed to `#{bayeux_personal_channel}`: #{error.inspect}")
+        Rails.logger.error("bayeaux publish failed to `#{personal_channel}`: #{error.inspect}")
       end
     end
 
@@ -53,5 +53,9 @@ class OnSubscribeSendBuffer
   rescue => e
     Rails.logger.error("#{e.class} in #{self.class}: #{e.message} at #{e.backtrace.first} for #{message.inspect}")
     raise
+  end
+
+  def bayeux_personal_channel(api_key, public_channel)
+    "/personal/#{api_key}#{public_channel}"
   end
 end
