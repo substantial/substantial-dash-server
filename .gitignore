@@ -23,3 +23,5 @@ vendor/bundle
 # rubymine
 /.idea
 .rvmrc
+
+.ssh/authorized_keys
