@@ -29,6 +29,12 @@ RUN add-apt-repository -y ppa:chris-lea/redis-server
 RUN apt-get update
 RUN apt-get install -y redis-server
 
+# Configure Redis (specifically data dir & mem limit)
+ADD etc/redis.conf /etc/redis.conf
+
+# Persist data between containers
+VOLUME ["/opt/redis-data"]
+
 #-----------------------------------------------------------------------
 # Ruby install
 # https://index.docker.io/u/paintedfox/ruby/

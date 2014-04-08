@@ -76,9 +76,14 @@ These notes are for a development [installation of Docker on OS X](http://docs.d
     # The main build.
     time docker build -t="substantial-dash" .
 
-    # Fire it up. Note all environment variables must be passed
-    # as `-e` options.
-    docker run -d -p 0.0.0.0:8080:80 -p 0.0.0.0:2222:22 -e BAYEUX_PUBLISH_KEY=meow -e BAYEUX_URL="http://0.0.0.0:8080/bayeux" -t substantial-dash
+    # Create a volume container for Redis persistence
+    docker run -v /opt/redis-data --name redis-data ubuntu true
+
+    # Fire it up. Note:
+    # * the storage for Redis data must be mounted with `--volumes-from`
+    # * all environment variables must be passed as `-e` options
+    #
+    docker run -d --volumes-from redis-data -p 0.0.0.0:8080:80 -p 0.0.0.0:2222:22 -e BAYEUX_PUBLISH_KEY=meow -e BAYEUX_URL="http://0.0.0.0:8080/bayeux" substantial-dash
 
     # ssh into the container
     ssh -p 2222 root@0.0.0.0
@@ -88,7 +93,5 @@ The [Dockerfile](http://docs.docker.io/en/latest/reference/builder/) defines the
 See all [Docker commands](http://docs.docker.io/en/latest/reference/commandline/cli/)
 
 #### Caveats
-
-Because Redis is running inside the conatiner without any external connectivity, **persistence will be lost** when the container is restarted or rebuilt. This shall be solved by running a Redis server external to the app container.
 
 The passing of environment variable for all the DataIntake API configurations is clunky.
