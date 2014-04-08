@@ -71,6 +71,8 @@ These notes are for a development [installation of Docker on OS X](http://docs.d
     boot2docker start
 
     # Import a public key for ssh access to the container.
+    # (Skip if you're @substantial.com and have access to the default 
+    # key pair in LastPass Shared-Substantial-Dash.)
     cat ~/.ssh/id_rsa.pub > .ssh/authorized_keys
 
     # The main build.
@@ -83,10 +85,27 @@ These notes are for a development [installation of Docker on OS X](http://docs.d
     # * the storage for Redis data must be mounted with `--volumes-from`
     # * all environment variables must be passed as `-e` options
     #
-    docker run -d --volumes-from redis-data -p 0.0.0.0:8080:80 -p 0.0.0.0:2222:22 -e BAYEUX_PUBLISH_KEY=meow -e BAYEUX_URL="http://0.0.0.0:8080/bayeux" substantial-dash
+    docker run -d --volumes-from redis-data -p 8080:80 -p 2222:22 -e BAYEUX_PUBLISH_KEY=meow -e BAYEUX_URL="http://0.0.0.0:8080/bayeux" substantial-dash
 
     # ssh into the container
     ssh -p 2222 root@0.0.0.0
+
+    # access the web app at http://0.0.0.0:8080
+
+
+    # To run on a Docker host, first save the image.
+    docker save XXXXXXXXXXXX > substantial-dash.tar
+
+    # Then upload it to the host.
+    scp substantial-dash.tar user@host:substantial-dash.tar
+
+    # Then login to the host
+    ssh user@host
+
+    # ...and load it into Docker.
+    docker load < substantial-dash.tar
+
+    # Load should have returned a hash XXXXXXXXXXXX. Specify it for the run command.
 
 The [Dockerfile](http://docs.docker.io/en/latest/reference/builder/) defines the build.
 
