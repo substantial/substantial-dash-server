@@ -1,8 +1,14 @@
-FROM dockerfile/ubuntu
+FROM ubuntu:13.10
 
 MAINTAINER Mars Hall <mars@substantial.com>
 
-RUN apt-get update && apt-get upgrade
+RUN apt-key update -y && apt-get update -y && apt-get upgrade -y
+
+#-----------------------------------------------------------------------
+# basic utils
+#-----------------------------------------------------------------------
+RUN apt-get install -y software-properties-common
+RUN apt-get install -y curl git htop unzip nano wget
 
 #-----------------------------------------------------------------------
 # ssh server install
@@ -24,7 +30,6 @@ ADD etc/supervisor/conf.d /etc/supervisor/conf.d
 # Redis install
 # https://index.docker.io/u/dockerfile/redis/
 #-----------------------------------------------------------------------
-RUN apt-get install -y software-properties-common
 RUN add-apt-repository -y ppa:chris-lea/redis-server
 RUN apt-get update
 RUN apt-get install -y redis-server
