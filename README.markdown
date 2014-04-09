@@ -56,3 +56,61 @@ Start the application:
     PORT=8001 bundle exec foreman start
 
 ...and visit [http://0.0.0.0:8001](http://0.0.0.0:8001) in your browser.
+
+### Deployment
+
+While our MVP hosting is via Heroku, we're now experimenting with deployment as a [Docker container](https://www.docker.io/).
+
+These notes are for a development [installation of Docker on OS X](http://docs.docker.io/en/latest/installation/mac/) using **boot2docker**.
+
+    # Expose the Docker hosts ssh & HTTP service ports to the host OS X system.
+    # (Must match the host ports in the `docker run` command below.)
+    boot2docker stop
+    VBoxManage modifyvm "boot2docker-vm" --natpf1 "tcp-port2222,tcp,,2222,,2222"
+    VBoxManage modifyvm "boot2docker-vm" --natpf1 "tcp-port8080,tcp,,8080,,8080"
+    boot2docker start
+
+    # Import a public key for ssh access to the container.
+    # (Skip if you're @substantial.com and have access to the default 
+    # key pair in LastPass Shared-Substantial-Dash.)
+    cat ~/.ssh/id_rsa.pub > .ssh/authorized_keys
+
+    # The main build.
+    time docker build -t="substantial-dash" .
+
+    # Create a volume container for Redis persistence
+    docker run -v /opt/redis-data --name redis-data ubuntu true
+
+    # Fire it up. Note:
+    # * the storage for Redis data must be mounted with `--volumes-from`
+    # * all environment variables must be passed as `-e` options
+    #
+    docker run -d --volumes-from redis-data -p 8080:80 -p 2222:22 -e BAYEUX_PUBLISH_KEY=meow -e BAYEUX_URL="http://0.0.0.0:8080/bayeux" substantial-dash
+
+    # ssh into the container (specify the private key for the pubkey imported to the image)
+    ssh -i ~/.ssh/id_rsa -p 2222 root@0.0.0.0
+
+    # access the web app at http://0.0.0.0:8080
+
+
+    # To run on a Docker host, first save the image.
+    docker save XXXXXXXXXXXX > substantial-dash.tar
+
+    # Then upload it to the host.
+    scp substantial-dash.tar user@host:substantial-dash.tar
+
+    # Then login to the host
+    ssh user@host
+
+    # ...and load it into Docker.
+    docker load < substantial-dash.tar
+
+    # Load should have returned a hash XXXXXXXXXXXX. Specify it for the run command.
+
+The [Dockerfile](http://docs.docker.io/en/latest/reference/builder/) defines the build.
+
+See all [Docker commands](http://docs.docker.io/en/latest/reference/commandline/cli/)
+
+#### Caveats
+
+The passing of environment variable for all the DataIntake API configurations is clunky.
