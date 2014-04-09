@@ -87,8 +87,8 @@ These notes are for a development [installation of Docker on OS X](http://docs.d
     #
     docker run -d --volumes-from redis-data -p 8080:80 -p 2222:22 -e BAYEUX_PUBLISH_KEY=meow -e BAYEUX_URL="http://0.0.0.0:8080/bayeux" substantial-dash
 
-    # ssh into the container
-    ssh -p 2222 root@0.0.0.0
+    # ssh into the container (specify the private key for the pubkey imported to the image)
+    ssh -i ~/.ssh/id_rsa -p 2222 root@0.0.0.0
 
     # access the web app at http://0.0.0.0:8080
 
