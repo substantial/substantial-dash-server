@@ -60,7 +60,7 @@ class IcalendarUpcoming < DataIntake
       elsif event.recurs?
         events.concat(
           event.occurrences(
-            starting: now, 
+            starting: now - 2.hours, 
             count: EVENT_COUNT_LIMIT
           )
         )
