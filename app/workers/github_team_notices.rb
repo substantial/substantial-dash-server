@@ -37,7 +37,7 @@ class GithubTeamNotices < DataIntake
 
   def team
     return @team if @team
-    teams = octokit.org_teams(ENV['INTAKE_GITHUB_ORG_SLUG'])
+    teams = octokit.org_teams(ENV['INTAKE_GITHUB_ORG_SLUG'], per_page: 100) # so many teams
     @team = teams.find {|t| t['slug'] == ENV['INTAKE_GITHUB_TEAM_SLUG'] }
     unless @team
       Rails.logger.error "#{self.class} could not find team in teams list: #{ENV['INTAKE_GITHUB_TEAM_SLUG'].inspect}"
