@@ -14,17 +14,13 @@ RUN apt-get install -y curl git htop unzip nano wget
 # ssh server install
 #-----------------------------------------------------------------------
 RUN apt-get install -y openssh-server
-ADD etc/ssh/sshd_config /etc/ssh/sshd_config
-ADD .ssh/authorized_keys /root/.ssh/authorized_keys
 RUN mkdir -p /var/run/sshd
-RUN chmod -R 700 /root/.ssh && \
-    chown -R root /root/.ssh
+RUN mkdir -p /root/.ssh
 
 #-----------------------------------------------------------------------
 # Supervisor install
 #-----------------------------------------------------------------------
 RUN apt-get install -y supervisor
-ADD etc/supervisor/conf.d /etc/supervisor/conf.d
 
 #-----------------------------------------------------------------------
 # Redis install
@@ -33,12 +29,6 @@ ADD etc/supervisor/conf.d /etc/supervisor/conf.d
 RUN add-apt-repository -y ppa:chris-lea/redis-server
 RUN apt-get update
 RUN apt-get install -y redis-server
-
-# Configure Redis (specifically data dir & mem limit)
-ADD etc/redis.conf /etc/redis.conf
-
-# Persist data between containers
-VOLUME ["/opt/redis-data"]
 
 #-----------------------------------------------------------------------
 # Ruby install
@@ -62,6 +52,7 @@ RUN apt-get -y install build-essential zlib1g-dev libssl-dev libreadline6-dev li
 # Rails app 
 # http://ilikestuffblog.com/2014/01/06/how-to-skip-bundle-install-when-eploying#-a-rails-app-to-docker/
 #-----------------------------------------------------------------------
+RUN gem update --system
 RUN gem install bundler
 
 # Cache bundle by running install before adding the app itself.
@@ -85,8 +76,17 @@ RUN rm -rf /opt/rails_app/tmp/*
 #-----------------------------------------------------------------------
 # initialize environment
 #-----------------------------------------------------------------------
+# Import all configurations
+ADD .ssh /root/.ssh
+RUN chmod -R 700 /root/.ssh && \
+    chown -R root /root/.ssh
+ADD etc /etc
+
 # Set the final working dir to the Rails app's location.
 WORKDIR /opt/rails_app
+
+# Persist data between containers
+VOLUME ["/opt/redis-data"]
 
 #-----------------------------------------------------------------------
 # Container config
