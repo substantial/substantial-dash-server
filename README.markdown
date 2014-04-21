@@ -78,7 +78,7 @@ These notes are for a development [installation of Docker on OS X](http://docs.d
     # The main build.
     time docker build -t="substantial-dash" .
 
-    # Create a volume container for Redis persistence
+    # Create a volume container for Redis persistence (only do this once)
     docker run -v /opt/redis-data --name redis-data ubuntu true
 
     # Fire it up. Note:
@@ -89,6 +89,9 @@ These notes are for a development [installation of Docker on OS X](http://docs.d
 
     # ssh into the container (specify the private key for the pubkey imported to the image)
     ssh -i ~/.ssh/id_rsa -p 2222 root@0.0.0.0
+    # Another example, the ssh command used for the Substantial container is:
+    ssh -i ~/.ssh/substantial_dash_rsa.pub -o "UserKnownHostsFile /dev/null" -p 2222 root@dash.substantial.com
+    # ("-o" prevents MiTM errors on subsequent runs)
 
     # access the web app at http://0.0.0.0:8080
 
