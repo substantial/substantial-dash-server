@@ -11,6 +11,7 @@ Designed to broadcast data to [Substantial Dash client](https://github.com/subst
 * [Redis](http://redis.io): work queue, scheduling, and key/value persistence
 * [Sidekiq](http://mperham.github.com/sidekiq/): asynchronous job processing
 * [OmniAuth](https://github.com/intridea/omniauth): user authentication
+* [Docker](https://www.docker.io/): modular app hosting
 
 ## Development
 
