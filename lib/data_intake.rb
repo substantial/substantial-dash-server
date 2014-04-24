@@ -28,19 +28,15 @@ class DataIntake
   #
   def publish(object)
     json = JSON.generate(object)
-
-    EM.run do
-      client = Faye::Client.new(ENV['BAYEUX_URL'])
-      client.add_extension(PublisherAuth::Client.new)
-      publication = client.publish(bayeux_channel, json)
-      publication.callback do
-        Rails.logger.debug("bayeaux published to `#{bayeux_channel}`")
-        EM.stop_event_loop
-      end
-      publication.errback do |error|
-        Rails.logger.debug("bayeaux publish failed to `#{bayeux_channel}`: #{error.inspect}")
-        EM.stop_event_loop
-      end
+    run_event_machine
+    client = Faye::Client.new(ENV['BAYEUX_URL'])
+    client.add_extension(PublisherAuth::Client.new)
+    publication = client.publish(bayeux_channel, json)
+    publication.callback do
+      Rails.logger.debug("bayeaux published to `#{bayeux_channel}`")
+    end
+    publication.errback do |error|
+      Rails.logger.debug("bayeaux publish failed to `#{bayeux_channel}`: #{error.inspect}")
     end
   end
 
@@ -56,4 +52,8 @@ class DataIntake
     "/#{channel_name}"
   end
 
+  def run_event_machine
+    Thread.new { EM.run } unless EM.reactor_running?
+    Thread.pass until EM.reactor_running?
+  end
 end
