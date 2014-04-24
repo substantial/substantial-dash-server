@@ -118,3 +118,16 @@ See all [Docker commands](http://docs.docker.io/en/latest/reference/commandline/
 #### Caveats
 
 The passing of environment variable for all the DataIntake API configurations is clunky.
+
+The default file descriptors / open files limit is typically too small for a long-running Redis server. This cannot be changed within a container. Instead, it must be changed for the Docker daemon itself. For example, using the Docker application Droplet at DigitalOcean, in **/etc/init/docker.conf** add the `limit nofile` line and then restart docker `stop docker && start docker`:
+
+    description "Docker daemon"
+
+    start on filesystem
+    stop on runlevel [!2345]
+
+    # set max file descriptors to 65536 (soft/hard)
+    limit nofile 65536 65536
+
+    respawn
+    ...
