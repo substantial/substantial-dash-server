@@ -7,11 +7,8 @@ describe FayePublisher do
 
   subject { FayePublisher.new }
 
-  describe '#publish', eventmachine: true do
+  describe '#publish' do
     before do
-      # em-spec will manage the run loop
-      EM.stub(:run).and_yield
-
       subject.define_singleton_method(:bayeux_channel) do
         '/foo-channel'
       end

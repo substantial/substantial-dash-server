@@ -24,7 +24,6 @@ group :test do
   gem 'rspec'
   gem 'rspec-rails'
   gem 'timecop'
-  gem 'em-rspec', git: 'https://github.com/substantial/em-rspec.git'
 end
 
 # Multi-threaded, concurrent app server.
