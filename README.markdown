@@ -131,3 +131,12 @@ The default file descriptors / open files limit is typically too small for a lon
 
     respawn
     ...
+
+### Tips-n-tricks
+
+Trigger all connected clients to reload the app. In the Rails console `bundle exec rails c`:
+
+```ruby
+require 'client_command'
+ClientCommand.exec('reload')
+```
