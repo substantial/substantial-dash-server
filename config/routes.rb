@@ -6,6 +6,7 @@ SubstantialDashServer::Application.routes.draw do
   # OmniAuth handlers
   match '/auth/:provider/callback', to: 'auth#callback', via: [:get, :post]
   match '/auth/failure', to: 'auth#failure', via: [:get, :post]
+  match '/auth/logout', to: 'auth#logout', via: [:get, :post]
 
   #TODO Implement authentication before exposing Sidekiq UI.
   # require 'sidekiq/web'

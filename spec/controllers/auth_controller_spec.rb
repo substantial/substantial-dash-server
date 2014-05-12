@@ -97,4 +97,40 @@ describe AuthController do
     end
   end
 
+  describe '#logout' do
+    let(:api_key) {'foo-diddly-bar'}
+
+    it "deletes the API key" do
+      $redis.should_receive(:del) do |key, value|
+        expect(key).to match(/^api-read-key:#{api_key}/)
+        nil
+      end
+      get :logout, api_key: api_key
+    end
+
+    describe 'with an HTTP referer' do
+      before do
+        request.env['HTTP_REFERER'] = 'http://bar.foo/'
+      end
+
+      it "deletes the API key" do
+        $redis.should_receive(:del) do |key, value|
+          expect(key).to match(/^api-read-key:#{api_key}/)
+          nil
+        end
+        get :logout, api_key: api_key
+      end
+
+      it "redirects back to the auth referer" do
+        get :logout, api_key: api_key
+        expect(response.location).to match('http://bar.foo/')
+      end
+
+      it "redirects with the logout flag" do
+        get :logout, api_key: api_key
+        expect(response.location).to match(/logout=true/)
+      end
+    end
+  end
+
 end

@@ -23,4 +23,12 @@ class AuthController < ApplicationController
     @auth_message = params[:message]
   end
 
+  def logout
+    @api_key = params[:api_key]
+    $redis.del("#{SubscriberAuth::KEY_PREFIX}#{@api_key}")
+    if referer = request.referer
+      redirect_to "#{referer}?logout=true"
+    end
+  end
+
 end
